@@ -1,2 +1,1 @@
-# my-tasks-for-Just-DNA-Seq
-my tasks for Just-DNA-Seq
+Description of the project: [https://antonkulaga.github.io/dna-seq/](https://antonkulaga.github.io/dna-seq/)
