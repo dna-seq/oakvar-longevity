@@ -1,0 +1,16 @@
+name: opencravat-longevity
+channels:
+  - conda-forge
+  - bioconda
+  - defaults
+dependencies:
+  - python=3.9
+  - jupyterlab
+  - papermill=2.3.3
+  - open-cravat=2.2.7
+  - numpy
+  - pandas
+  - pip:
+      - pyfunctional
+      - pycomfort
+

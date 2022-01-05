@@ -1,3 +1,20 @@
-1. Longevity genes splitting/.ipynb_checkpoints
-1. Longevity genes splitting/del
-1. Longevity genes splitting/release.html
+test
+*.class
+*.log
+logs
+
+#VIM specific
+tags
+.*.swp
+.*.swo
+
+#MAC OS specific
+.DS_Store
+
+# IDE specific
+.cache/
+.history/
+.lib/
+dist/*
+.idea
+.idea/*
