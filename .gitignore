@@ -1,1 +1,20 @@
-bin
+test
+*.class
+*.log
+logs
+
+#VIM specific
+tags
+.*.swp
+.*.swo
+
+#MAC OS specific
+.DS_Store
+
+# IDE specific
+.cache/
+.history/
+.lib/
+dist/*
+.idea
+.idea/*
