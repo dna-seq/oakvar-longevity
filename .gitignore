@@ -17,4 +17,4 @@ tags
 .lib/
 dist/*
 .idea
-.idea/*bin
+.idea/*
