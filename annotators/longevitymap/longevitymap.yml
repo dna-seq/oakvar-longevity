@@ -1,5 +1,5 @@
 # 'title' is the name of the module that will be displayed to the user
-title: Annotator Template
+title: LongevityMap Annotator
 
 # 'version' is the version of the annotator. It is primarily used when 
 # publishing a module, but is required for all modules.
@@ -18,23 +18,38 @@ level: variant
 output_columns:
   # name is the internal name and is the key used to identify the column in the
   # dictionary returned by the annotate method of annotator_name.py
-- name: placeholder_annotation
+- name: pldbid
   # title is the display name of this column, similar to the title of the module.
   # It can be changed without affecting the functionality of CRAVAT
-  title: Placeholder Annotation
+  title: LongevityMap ID
   # type is the data type of the value. It is primarily used when storing the 
   # results in a database. It may be one of string, int, or float.
   type: string
-
+- name: association
+  title: Significance
+  type: string
+- name: population
+  title: Source Population
+  type: string
+- name: rsid
+  title: dbSNP id
+  type: string
+- name: genes
+  title: Associated Genes
+  type: string
+- name: pmid
+  title: PubMed ID
+  type: string
+  
 # description is a short description of what the annotator does. Try to limit it
 # to around 80 characters.
-description: Template annotator. If you see this description in production, someone is wrong.
+description: Just-DNA-Seq LongevityMap annotator for opencravat.
 
 # developer is you!
 developer:
-  name: ''
-  organization: ''
-  email: ''
-  website: ''
+  name: 'Anton Kulaga, Newton Winter, Lady3minm et al'
+  organization: 'Just-DNA-Seq'
+  email: 'dna.seq@protonmail.com'
+  website: 'https://github.com/antonkulaga/opencravat-longevity'
   citation: ''
 
