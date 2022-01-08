@@ -1,13 +1,14 @@
 import sys
+import os
+import sqlite3
+import pandas
+
 from cravat import BaseAnnotator
 from cravat import InvalidData
-import csv, sqlite3, pandas
-import os
 
 
 class CravatAnnotator(BaseAnnotator):
 
-    dbsnp_base = 0 #object pointer
     csv_fn = 'data/longevitymap.csv'
     table_name = 'longevitymap'
     index_label = 'lmid'
@@ -22,26 +23,12 @@ class CravatAnnotator(BaseAnnotator):
         sqlite3.Cursor object is stored as self.cursor.
         """
 
-        self.dbsnp_base = sqlite3.connect('sqlite:///dbsnp.db') #where?
-
         assert os.path.isfile( self.csv_fn)
-        assert isinstance(self.dbsnp_base, sqlite3.Connection)
         assert isinstance(self.dbconn, sqlite3.Connection)
         assert isinstance(self.cursor, sqlite3.Cursor)
 
-        df = pandas.read_csv( self.csv_fn, header=0, names=self.col_names) # Read a comma-separated values (csv) file into DataFrame
-        df.to_sql( self.table_name, self.dbconn, if_exists='replace', index=True, index_label= self.index_label ) #Write records stored in a DataFrame to a SQL database.
-
-        # same by hand:
-        #con = self.dbconn #pointer to instance of connection
-        #cur = self.cursor #cursor pointer
-        # cur.execute("CREATE TABLE t (id,Association,Population,Variants,Genes,PubMed);") # use your column names here
-        # with open('data.csv','r') as fin: # `with` statement available in 2.5+
-        #    # csv.DictReader uses first line in file for column headings by default
-        #    dr = csv.DictReader(fin) # comma is default delimiter
-        #    to_db = [(i['id'], i['Association'], i['Population'], i['Variant(s)']), i['Gene(s)']), i['PubMed']) for i in dr]
-        # cur.executemany("INSERT INTO t (id,Association,Population,Variants,Genes,PubMed) VALUES (?, ?, ?, ?, ?, ?);", to_db)
-        # con.commit()
+        df = pandas.read_csv(self.csv_fn, header=0, names=self.col_names) # Read a comma-separated values (csv) file into DataFrame
+        df.to_sql(self.table_name, self.dbconn, if_exists='replace', index=True, index_label=self.index_label) #Write records stored in a DataFrame to a SQL database.
 
         pass
 
@@ -71,28 +58,28 @@ class CravatAnnotator(BaseAnnotator):
         carefully to ensure that your data is ending up where you intend.
         """
 
-        rsquery = 'select snp from {chrom} where pos = {pos} and ref = "{ref}" and alt = "{alt}"'.format(
-            chrom=input_data["chrom"], pos=int(input_data["pos"]), ref=input_data["ref_base"], alt=input_data["alt_base"])
+        if secondary_data['dbsnp'] and secondary_data['dbsnp'][0] is not None:
+            rsids = secondary_data['dbsnp'][0]['rsid'].split(',')
+        else:
+            rsids = []
 
-        self.dbsnp_base.cursor.execute(rsquery)
-        row = self.dbsnp_base.cursor.fetchone()
+        if secondary_data['dbsnp_common'] and secondary_data['dbsnp_common'][0] is not None:
+            rsids += secondary_data['dbsnp_common'][0]['rsid'].split(',') # concatenate lists
 
-        if row is not None:
-            rsid = 'rs' + str(row[0]) #rsid from dbsnp base
+        if not rsids:
+            return None
 
-            query = 'select id,association,population,genes,pmid from {id} where variants = {variants}'.format(
-                id=self.table_name, variants=rsid)
+        for rsid in rsids:
+            query = 'select id,association,population,genes,pmid from {table} where variants = {variants}'.format(
+                table=self.table_name, variants=rsid)
             self.cursor.execute(query)
             result = self.cursor.fetchone()
-
-            if result is not None:
+            if result is not None: # found match matches
                 pldbid = result[0]
                 association = result[1]
                 population = result[2]
-                #variants = result[3] #matches rsid by query
-                genes = result[4] #todo: update csv using api query to ensembl
-                pmid = result[5]
-                col_names = ['id', 'association', 'population', 'variants', 'genes', 'pmid']
+                genes = result[3] #todo: update csv using api query to ensembl
+                pmid = result[4]
                 return {
                     'longevitydb_id': pldbid,
                     'association': association,
@@ -101,14 +88,9 @@ class CravatAnnotator(BaseAnnotator):
                     'genes': genes,
                     'pmid': pmid,
                 }
-            else:
-                return None
-        else:
-            return None
 
-        out = {}
-        out['placeholder_annotation'] = 'placeholder value'
-        return out
+        return None # no rsid matches
+        pass
 
     def cleanup(self):
         """
@@ -116,9 +98,6 @@ class CravatAnnotator(BaseAnnotator):
         close database connections and file handlers. Automatically opened
         database connections are also automatically closed.
         """
-        # con.close()
-        dbsnp_base.close() #close connection to dbsnp
-
         pass
 
 
