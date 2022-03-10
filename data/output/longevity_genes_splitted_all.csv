@@ -1,5 +1,21 @@
 id,Association,Population,Variant(s),Gene(s),PubMed
+19,significant,Italian,rs1799889,SERPINE1,9108791
+46,non-significant,Danish,rs1799889,SERPINE1,10494771
+48,non-significant,Dutch,rs1799889,SERPINE1,10520809
+57,non-significant,German ,rs1799889,SERPINE1,11485022
+58,significant,Italian,rs1800795,IL6,11500818
+108,non-significant,Irish (Northern),rs1800795,IL6,12714267
+114,non-significant,Irish,rs1800795,IL6,12714268
+140,non-significant,Bulgarian,rs1800795,IL6,15050300
+146,non-significant,Danish,rs1799889,SERPINE1,15177664
+155,non-significant,Italian (Southern),rs1800795,IL6,15236771
+157,significant,Danish,rs1800795,IL6,15241482
+164,non-significant,Italian (Sardinia),rs1800795,IL6,15462469
+178,significant,Finnish,rs1800795,IL6,15664628
+190,non-significant,American (Caucasian),rs1800795,IL6,15939070
+191,non-significant,American (Caucasian),rs1799889,SERPINE1,15939070
 215,significant,Ashkenazi Jewish ,rs2542052,APOC3,16602826
+229,significant,Italian (Sicily),rs28929474,SERPINA1,17048073
 232,significant,Italian,rs5744256,IL18,17301041
 244,significant,Jordanian,rs1501299,ADIPOQ,20201642
 245,significant,Jordanian,rs7799039,LOC105375494,20201642
@@ -2876,7 +2892,8 @@ G547,non-significant,Danish,rs2540066,"GLRX,PARK7,GSTP1,CAT,XDH,SRXN1,PON1,ACOX1
 G547,non-significant,Danish,rs2299267,"GLRX,PARK7,GSTP1,CAT,XDH,SRXN1,PON1,ACOX1,LOX,GPX1,GPX3,LOC105378228,TXN2,MT1A,CP,PPP1R9A,NDUFV1,UCP1,GPX4,AOX1,NDUFV2,GSR,UCP2,NOS3,CYP1B1,PON2,PON3,GSS,UQCRFS1,CYC1,LOC105372352,G6PD,GCLC,NOX1,MYH7B,GSTM3,PRDX3,LOC105376622,SOD1,SOD3",24462499
 G547,non-significant,Danish,rs2375005,"GLRX,PARK7,GSTP1,CAT,XDH,SRXN1,PON1,ACOX1,LOX,GPX1,GPX3,LOC105378228,TXN2,MT1A,CP,PPP1R9A,NDUFV1,UCP1,GPX4,AOX1,NDUFV2,GSR,UCP2,NOS3,CYP1B1,PON2,PON3,GSS,UQCRFS1,CYC1,LOC105372352,G6PD,GCLC,NOX1,MYH7B,GSTM3,PRDX3,LOC105376622,SOD1,SOD3",24462499
 G547,non-significant,Danish,rs17309872,"GLRX,PARK7,GSTP1,CAT,XDH,SRXN1,PON1,ACOX1,LOX,GPX1,GPX3,LOC105378228,TXN2,MT1A,CP,PPP1R9A,NDUFV1,UCP1,GPX4,AOX1,NDUFV2,GSR,UCP2,NOS3,CYP1B1,PON2,PON3,GSS,UQCRFS1,CYC1,LOC105372352,G6PD,GCLC,NOX1,MYH7B,GSTM3,PRDX3,LOC105376622,SOD1,SOD3",24462499
-G547,non-significant,Danish,rs3918188rs3918226,"GLRX,PARK7,GSTP1,CAT,XDH,SRXN1,PON1,ACOX1,LOX,GPX1,GPX3,LOC105378228,TXN2,MT1A,CP,PPP1R9A,NDUFV1,UCP1,GPX4,AOX1,NDUFV2,GSR,UCP2,NOS3,CYP1B1,PON2,PON3,GSS,UQCRFS1,CYC1,LOC105372352,G6PD,GCLC,NOX1,MYH7B,GSTM3,PRDX3,LOC105376622,SOD1,SOD3",24462499
+G547,non-significant,Danish,rs3918188,"GLRX,PARK7,GSTP1,CAT,XDH,SRXN1,PON1,ACOX1,LOX,GPX1,GPX3,LOC105378228,TXN2,MT1A,CP,PPP1R9A,NDUFV1,UCP1,GPX4,AOX1,NDUFV2,GSR,UCP2,NOS3,CYP1B1,PON2,PON3,GSS,UQCRFS1,CYC1,LOC105372352,G6PD,GCLC,NOX1,MYH7B,GSTM3,PRDX3,LOC105376622,SOD1,SOD3",24462499
+G547,non-significant,Danish,rs3918226,"GLRX,PARK7,GSTP1,CAT,XDH,SRXN1,PON1,ACOX1,LOX,GPX1,GPX3,LOC105378228,TXN2,MT1A,CP,PPP1R9A,NDUFV1,UCP1,GPX4,AOX1,NDUFV2,GSR,UCP2,NOS3,CYP1B1,PON2,PON3,GSS,UQCRFS1,CYC1,LOC105372352,G6PD,GCLC,NOX1,MYH7B,GSTM3,PRDX3,LOC105376622,SOD1,SOD3",24462499
 G547,non-significant,Danish,rs43037,"GLRX,PARK7,GSTP1,CAT,XDH,SRXN1,PON1,ACOX1,LOX,GPX1,GPX3,LOC105378228,TXN2,MT1A,CP,PPP1R9A,NDUFV1,UCP1,GPX4,AOX1,NDUFV2,GSR,UCP2,NOS3,CYP1B1,PON2,PON3,GSS,UQCRFS1,CYC1,LOC105372352,G6PD,GCLC,NOX1,MYH7B,GSTM3,PRDX3,LOC105376622,SOD1,SOD3",24462499
 G547,non-significant,Danish,rs10420904,"GLRX,PARK7,GSTP1,CAT,XDH,SRXN1,PON1,ACOX1,LOX,GPX1,GPX3,LOC105378228,TXN2,MT1A,CP,PPP1R9A,NDUFV1,UCP1,GPX4,AOX1,NDUFV2,GSR,UCP2,NOS3,CYP1B1,PON2,PON3,GSS,UQCRFS1,CYC1,LOC105372352,G6PD,GCLC,NOX1,MYH7B,GSTM3,PRDX3,LOC105376622,SOD1,SOD3",24462499
 G547,non-significant,Danish,rs2540069,"GLRX,PARK7,GSTP1,CAT,XDH,SRXN1,PON1,ACOX1,LOX,GPX1,GPX3,LOC105378228,TXN2,MT1A,CP,PPP1R9A,NDUFV1,UCP1,GPX4,AOX1,NDUFV2,GSR,UCP2,NOS3,CYP1B1,PON2,PON3,GSS,UQCRFS1,CYC1,LOC105372352,G6PD,GCLC,NOX1,MYH7B,GSTM3,PRDX3,LOC105376622,SOD1,SOD3",24462499
@@ -3048,7 +3065,6 @@ G552,non-significant,Danish,Q95H,MTTP,16015282
 16,non-significant,English (Cambridge),677C/T,MTHFR,9105559
 17,non-significant,Italian,R353Q,F7,9108791
 18,non-significant,Italian,-455G/A,FGB,9108791
-19,significant,Italian,1-bp guanine deletion/insertion (4G/5G),SERPINE1,9108791
 20,non-significant,Danish,I/D,ACE,9170397
 21,non-significant,Spanish,CYP2D6,CYP2D6,9177672
 22,non-significant,Spanish,CYP2E1,CYP2E1,9177672
@@ -3074,9 +3090,7 @@ G552,non-significant,Danish,Q95H,MTTP,16015282
 43,non-significant,Danish,33L/P,ITGB3,10494771
 44,non-significant,Danish,114A/V,MTHFR,10494771
 45,non-significant,Danish,PLAT,PLAT,10494771
-46,non-significant,Danish,1-bp guanine deletion/insertion (4G/5G),SERPINE1,10494771
 47,non-significant,Dutch,I/D,ACE,10520809
-48,non-significant,Dutch,1-bp guanine deletion/insertion (4G/5G),SERPINE1,10520809
 49,non-significant,Swiss,C677T,MTHFR,10583447
 50,non-significant,Italian (Northern),CYP1A1,CYP1A1,11162685
 51,non-significant,Italian (Northern),GSTM1,GSTM1,11162685
@@ -3085,8 +3099,6 @@ G552,non-significant,Danish,Q95H,MTTP,16015282
 54,significant,Finnish,E2/E3/E4,APOE,11213279
 55,non-significant,French,I/D,ACE,11280044
 56,significant,French,E2/E3/E4,APOE,11280044
-57,non-significant,German ,1-bp guanine deletion/insertion (4G/5G),SERPINE1,11485022
-58,significant,Italian,-174C/G,IL6,11500818
 59,non-significant,American (Caucasian),G1691A,F5,11568114
 60,non-significant,American (Caucasian),C807T,ITGA2,11568114
 61,significant,American (Caucasian),T1565C,ITGB3,11568114
@@ -3136,13 +3148,11 @@ G552,non-significant,Danish,Q95H,MTTP,16015282
 105,non-significant,Italian (Northern and Central),-511C/T,IL1B,12714264
 106,non-significant,Italian (Northern and Central),IL1RN,IL1RN,12714264
 107,non-significant,Italian (Nothern and Central),-889C/T,IL1A,12714264
-108,non-significant,Irish (Northern),-174C/G,IL6,12714267
 109,significant,Irish,T2437C,HSPA1L,12714268
 110,non-significant,Irish,IFNG,IFNG,12714268
 111,non-significant,Irish,-1082G/A,IL10,12714268
 112,non-significant,Irish,IL12A,IL12A,12714268
 113,non-significant,Irish,-330T/G,IL2,12714268
-114,non-significant,Irish,-174C/G,IL6,12714268
 115,non-significant,Irish,IL8,CXCL8,12714268
 116,non-significant,Irish (Belfast),HLA-A,HLA-A,12714268
 117,non-significant,Irish (Belfast),HLA-B,HLA-B,12714268
@@ -3168,13 +3178,11 @@ G552,non-significant,Danish,Q95H,MTTP,16015282
 137,non-significant,Bulgarian,HLA-B,HLA-B,15050300
 138,non-significant,Bulgarian,HLA-C,HLA-C,15050300
 139,non-significant,Bulgarian,874T/A,IFNG,15050300
-140,non-significant,Bulgarian,-174C/G,IL6,15050300
 141,non-significant,Bulgarian,TGFB1,TGFB1,15050300
 142,non-significant,Bulgarian,-308G/A,TNF,15050300
 143,non-significant,Irish,KIR3DL1,KIR3DL1,15130674
 144,non-significant,Danish,GP1BA,GP1BA,15177664
 145,non-significant,Danish,114A/V,MTHFR,15177664
-146,non-significant,Danish,1-bp guanine deletion/insertion (4G/5G),SERPINE1,15177664
 147,significant,German ,V432L,CYP1B1,15177664
 148,non-significant,German ,GSTM1,GSTM1,15177664
 149,non-significant,German ,I105V,GSTP1,15177664
@@ -3183,16 +3191,13 @@ G552,non-significant,Danish,Q95H,MTTP,16015282
 152,non-significant,Danish,2437T/C,HSPA1L,15190186
 153,significant,Italian (Sicily),-107T/C,PON1,15236768
 154,significant,Italian,PPARG,PPARG,15236769
-155,non-significant,Italian (Southern),-174C/G,IL6,15236771
 156,non-significant,Danish,-262C/T,CAT,15241482
-157,significant,Danish,-174C/G,IL6,15241482
 158,significant,Danish,Q192R,PON1,15241482
 159,non-significant,Danish,-308G/A,TNF,15271127
 160,significant,Dutch,ER22/23EK,NR3C1,15276593
 161,non-significant,Irish,KIR3DL1,KIR3DL1,15288696
 162,non-significant,Italian (Sardinia),874T/A,IFNG,15462469
 163,non-significant,Italian (Sardinia),-1082G/A,IL10,15462469
-164,non-significant,Italian (Sardinia),-174C/G,IL6,15462469
 165,significant,Italian,Asp299Gly,TLR4,15547160
 166,significant,Chinese (Uighur in Xinjiang),I/D,ACE,15569453
 167,non-significant,Japanese,FOXO1,FOXO1,15582274
@@ -3206,7 +3211,6 @@ G552,non-significant,Danish,Q95H,MTTP,16015282
 175,significant,Ashkenazi Jewish (Jerusalem),A/G ApaI site,IGF2,15621215
 176,non-significant,Ashkenazi Jewish (Jerusalem),C677T,MTHFR,15621215
 177,non-significant,Ashkenazi Jewish (Jerusalem),C9T,SOD2,15621215
-178,significant,Finnish,-174C/G,IL6,15664628
 179,significant,Italian (Southern),VNTR,SIRT3,15676284
 180,significant,Dutch,GH1,GH1,15771611
 181,non-significant,Dutch,GHRHR,GHRHR,15771611
@@ -3218,8 +3222,6 @@ G552,non-significant,Danish,Q95H,MTTP,16015282
 187,non-significant,Italian,I405V,CETP,15888337
 188,significant,American (Caucasian),-438A/G,CPB2,15939070
 189,non-significant,American (Caucasian),-455G/A,FGB,15939070
-190,non-significant,American (Caucasian),-174C/G,IL6,15939070
-191,non-significant,American (Caucasian),1-bp guanine deletion/insertion (4G/5G),SERPINE1,15939070
 192,significant,Chinese (Uighur in Xinjiang),E2/E3/E4,APOE,16086293
 193,significant,Japanese,SLC6A4,SLC6A4,16095668
 194,significant,German ,D919G,MTR,16142417
@@ -3256,7 +3258,6 @@ G552,non-significant,Danish,Q95H,MTTP,16015282
 226,non-significant,German ,CNDP1,CNDP1,16965804
 227,significant,Columbian,I/D,ACE,16971231
 228,non-significant,Columbian,APOE,APOE,16971231
-229,significant,Italian (Sicily),SERPINE1,SERPINE1,17048073
 230,non-significant,Italian,I/D,ACE,17182125
 231,significant,Greek,E2/E3/E4,APOE,17234815
 233,non-significant,German ,Asp299Gly,TLR4,17493663
