@@ -1,0 +1,27 @@
+1-bp guanine deletion/insertion (4G/5G) -> rs1799889 https://www.snpedia.com/index.php/Rs1799889
+-174C/G,IL6 -> rs1800795 https://www.snpedia.com/index.php/Rs1800795 
+Q95H
+(#229,rs28929474) SERPINE1 -> SERPINA1 TYPO in DB, correct in article https://pubmed.ncbi.nlm.nih.gov/17048073/
+rs10735810 -> rs2228570, https://www.snpedia.com/index.php/Rs10735810 - Merged into rs2228570
+rs138174682-> null, https://www.ncbi.nlm.nih.gov/snp/rs138174682 rs138174682 was withdrawn on September 3, 2011. 
+rs147010831 -> null, https://www.ncbi.nlm.nih.gov/snp/rs147010831 rs147010831 was withdrawn on September 3, 2011. 
+rs148296241 -> null, https://www.ncbi.nlm.nih.gov/snp/rs148296241 rs148296241 was withdrawn on September 3, 2011. 
+rs148405845 -> null, https://www.ncbi.nlm.nih.gov/snp/rs148405845 rs148405845 was withdrawn on February 21, 2013. 
+rs149158541 -> null, https://www.ncbi.nlm.nih.gov/snp/rs149158541 rs149158541 was withdrawn on September 3, 2011. 
+rs10498263 -> null, https://www.ncbi.nlm.nih.gov/snp/rs10498263 Unsupported. This RefSNP no longer has any supporting observations. 
+rs2281891 -> null, https://www.ncbi.nlm.nih.gov/snp/rs2281891 rs2281891 was merged into rs1126545 on January 15, 2013 (Build 137) 
+rs28940479 -> rs28940579, does not exist! It is an error in article itself https://jlb.onlinelibrary.wiley.com/doi/full/10.1189/jlb.0705416 correct no is https://www.ncbi.nlm.nih.gov/snp/rs28940579 see https://www.ncbi.nlm.nih.gov/clinvar/variation/2540/
+rs1801200 -> rs1136201, https://www.ncbi.nlm.nih.gov/snp/rs1801200    rs1801200 was merged into rs1136201 on May 25, 2008 (Build 130) 
+rs4149396 -> rs1042028, https://www.ncbi.nlm.nih.gov/snp/rs4149396    rs4149396 was merged into rs1042028 on January 27, 2015 (Build 131) 
+rs17610395 -> rs2229738, https://www.ncbi.nlm.nih.gov/snp/rs17610395     rs17610395 was merged into rs2229738 on May 24, 2008 (Build 130) 
+rs17875322 -> rs3212227,   https://www.ncbi.nlm.nih.gov/snp/rs17875322  rs17875322 was merged into rs3212227 on March 11, 2006 (Build 126) 
+rs3087784 -> null,  https://www.ncbi.nlm.nih.gov/snp/rs3087784 Unsupported. This RefSNP no longer has any supporting observations. 
+rs1982073-> rs1800470, https://www.ncbi.nlm.nih.gov/snp/rs1982073 rs1982073 was merged into rs1800470 on May 25, 2008 (Build 130) 
+rs3136820 -> rs1130409,  https://www.ncbi.nlm.nih.gov/snp/rs3136820    rs3136820 was merged into rs1130409 on March 10, 2006 (Build 126) 
+rs603965 -> rs9344,  https://www.ncbi.nlm.nih.gov/snp/rs603965     rs603965 was merged into rs9344 on May 25, 2008 (Build 130) 
+rs8192284 -> rs2228145, https://www.ncbi.nlm.nih.gov/snp/rs8192284     rs8192284 was merged into rs2228145 on May 24, 2008 (Build 130) 
+rs37926683-> rs3792683, does not exist! It is an error in article itself https://academic.oup.com/biomedgerontology/article/62/2/202/574582 Typo, correct is https://www.ncbi.nlm.nih.gov/snp/rs3792683
+rs4147719 -> rs1801318, https://www.ncbi.nlm.nih.gov/snp/rs4147719 rs4147719 was merged into rs1801318 on May 25, 2008 (Build 130) 
+rs1137582 -> rs1135640, https://www.ncbi.nlm.nih.gov/snp/rs1137582 rs1137582 was merged into rs1135640 on May 25, 2008 (Build 130) 
+
+
