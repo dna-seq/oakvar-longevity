@@ -23,4 +23,4 @@ dist/*
 # Mal's specific
 notebooks/.ipynb_checkpoints
 release.html
-
+annotators/longevitymap/__pycache__
