@@ -3,7 +3,7 @@ title: LongevityMap Annotator
 
 # 'version' is the version of the annotator. It is primarily used when 
 # publishing a module, but is required for all modules.
-version: 0.0.2
+version: 0.0.3
 
 # 'type' is the type of module described by this .yml file. In this case it is
 # 'annotator'
@@ -12,9 +12,7 @@ type: annotator
 # 'level' is 'variant' or 'gene'
 level: variant
 
-requires:
-- dbsnp
-- dbsnp_common
+#requires:
 
 # output_columns has the columns that will be included in the output file.
 # The columns are defined in a list. Each column has three required keys:
@@ -45,11 +43,12 @@ output_columns:
 - name: pmid
   title: PubMed ID
   type: string
+- name: info
+  title: Info
+  type: string
 
 #Annotators can be piped together so that the output of one annotator can be used in the input of another annotator. 
-secondary_inputs:
-- dbsnp: {}
-- dbsnp_common: {}
+#secondary_inputs:
        
 # description is a short description of what the annotator does. Try to limit it
 # to around 80 characters.
@@ -61,7 +60,7 @@ tags:
 
 # developer is you!
 developer:
-  name: 'Anton Kulaga, Newton Winter, Lady3minm et al'
+  name: 'Anton Kulaga, Newton Winter, Alex Karmazin, Lady3minm et al'
   organization: 'Just-DNA-Seq'
   email: 'dna.seq@protonmail.com'
   website: 'https://github.com/antonkulaga/opencravat-longevity'

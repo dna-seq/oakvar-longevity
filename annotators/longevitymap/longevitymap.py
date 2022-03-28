@@ -8,12 +8,8 @@ from cravat import InvalidData
 
 
 class CravatAnnotator(BaseAnnotator):
-
-    csv_fn = 'data/longevitymap.csv'
-    table_name = 'longevitymap'
-    index_label = 'lmid'
-    col_names = ['id', 'association', 'population', 'variants', 'genes', 'pmid']
-
+    start_counter = 0
+    end_counter = 0
     def setup(self):
         """
         Set up data sources.
@@ -22,13 +18,6 @@ class CravatAnnotator(BaseAnnotator):
         sqlite3.Connection object is stored as self.dbconn, and the
         sqlite3.Cursor object is stored as self.cursor.
         """
-
-        assert os.path.isfile( self.csv_fn)
-        assert isinstance(self.dbconn, sqlite3.Connection)
-        assert isinstance(self.cursor, sqlite3.Cursor)
-
-        df = pandas.read_csv(self.csv_fn, header=0, names=self.col_names) # Read a comma-separated values (csv) file into DataFrame
-        df.to_sql(self.table_name, self.dbconn, if_exists='replace', index=True, index_label=self.index_label) #Write records stored in a DataFrame to a SQL database.
 
         pass
 
@@ -58,41 +47,42 @@ class CravatAnnotator(BaseAnnotator):
         carefully to ensure that your data is ending up where you intend.
         """
 
-        if secondary_data['dbsnp'] and secondary_data['dbsnp'][0] is not None:
-            rsids = secondary_data['dbsnp'][0]['rsid'].split(',')
-        else:
-            rsids = []
+        # if secondary_data['dbsnp'] and secondary_data['dbsnp'][0] is not None:
+        #     rsids = secondary_data['dbsnp'][0]['rsid'].split(',')
+        # else:
+        #     rsids = []
+        #
+        # if secondary_data['dbsnp_common'] and secondary_data['dbsnp_common'][0] is not None:
+        #     rsids += secondary_data['dbsnp_common'][0]['rsid'].split(',') # concatenate lists
+        #
+        # if not rsids:
+        #     return None
+        self.start_counter += 1
+        query = 'SELECT longevitydb_id, association, population, longevitymap.rsid, genes, pubmed_id, info ' \
+                'FROM longevitymap, snps WHERE chrom = "{chrom}" AND pos = {pos} AND ref = "{ref}" AND alt = "{alt}" ' \
+                'AND longevitymap.rsid = snps.rsid'.format(
+            chrom = input_data["chrom"], pos = int(input_data["pos"]), ref = input_data["ref_base"], alt = input_data["alt_base"])
+        self.cursor.execute(query)
+        row = self.cursor.fetchone()
 
-        if secondary_data['dbsnp_common'] and secondary_data['dbsnp_common'][0] is not None:
-            rsids += secondary_data['dbsnp_common'][0]['rsid'].split(',') # concatenate lists
-
-        if not rsids:
-            return None
-
-        for rsid in rsids:
-            query = 'select id,association,population,genes,pmid from {table} where variants = {variants}'.format(
-                table=self.table_name, variants=rsid)
-            self.cursor.execute(query)
-            result = self.cursor.fetchone()
-            if result is not None: # found match matches
-                pldbid = result[0]
-                association = result[1]
-                population = result[2]
-                genes = result[3] #todo: update csv using api query to ensembl
-                pmid = result[4]
-                return {
-                    'longevitydb_id': pldbid,
-                    'association': association,
-                    'population': population,
-                    'rsid': rsid,
-                    'genes': genes,
-                    'pmid': pmid,
-                }
+        if row:
+            self.end_counter += 1
+            return {
+                'longevitydb_id': str(row[0]),
+                'association': str(row[1]),
+                'population': str(row[2]),
+                'rsid': str(row[3]),
+                'genes': str(row[4]),
+                'pmid': str(row[5]),
+                'info': str(row[6])
+            }
 
         return None # no rsid matches
         pass
 
     def cleanup(self):
+        print("start_counter:", self.start_counter)
+        print("end_counter:", self.end_counter)
         """
         cleanup is called after every input line has been processed. Use it to
         close database connections and file handlers. Automatically opened
