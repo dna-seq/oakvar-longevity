@@ -1,0 +1,13 @@
+title: Longevitymap
+version: 0.1
+type: webviewerwidget
+required_annotator: longevitymap
+description: Longevitymap webviewer widget
+developer:
+  name: Alex Karmazin
+  organization: Just DNA Sec.
+  email: karmazinalex@gmail.com
+  website: https://github.com/dna-seq/opencravat-longevity
+  citation: ''
+tags:
+- visualization

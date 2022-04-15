@@ -43,9 +43,11 @@ output_columns:
 - name: pmid
   title: PubMed ID
   type: string
+  link_format: https://pubmed.ncbi.nlm.nih.gov/${.*}
 - name: info
   title: Info
   type: string
+  hidden: true
 
 #Annotators can be piped together so that the output of one annotator can be used in the input of another annotator. 
 #secondary_inputs:
