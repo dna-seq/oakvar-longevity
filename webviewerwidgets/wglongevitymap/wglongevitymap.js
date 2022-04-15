@@ -4,7 +4,11 @@ widgetGenerators['longevitymap'] = {
 		'height': 150, 
 		'function': function (div, row, tabName) {
             var info = getWidgetData(tabName, 'longevitymap', row, 'info');
-            if (info == null || info == '') {
+			var longevityId = null;
+			if (info == null || info == '')
+				longevityId = getWidgetData(tabName, 'longevitymap', row, 'longevitydb_id');
+				
+            if (longevityId == null && info == null) {
                 var span = getEl('span');
                 span.classList.add('nodata');
 				addEl(div, addEl(span, getTn('No data')));
@@ -19,13 +23,52 @@ widgetGenerators['longevitymap'] = {
 			addEl(table, thead);
 			var tbody = getEl('tbody');
 			addEl(table, tbody);
-						
-			var rows = info.split("____");
-			for (var r = 0; r < rows.length;r++){
-				var row = rows[r].split("__");
-				var tr = getWidgetTableTr(row);
-				addEl(tbody, tr);
+			function linkify(arr){
+				return [arr[0], arr[1], arr[2],
+						'https://www.snpedia.com/index.php/Rs'+arr[3],
+						arr[4] == 'None' ? 'None' : 'https://genomics.senescence.info/longevity/gene.php?id='+arr[4],
+						'https://pubmed.ncbi.nlm.nih.gov/'+arr[5]];
+			};
+			function subRow(arr){
+				if (arr[4] == 'None')
+					return [arr[3], arr[5]];
+				else
+					return [arr[3], arr[4], arr[5]];
+			}
+			
+			function addRow(row, tbody){
+				if (row[4].indexOf(',') != -1){
+					var parts = row[4].split(',');
+					for(var i in parts){
+						row[4] = parts[i];
+						var tr = getWidgetTableTr(linkify(row), subRow(row));
+						addEl(tbody, tr);
+					}
+				} else {
+					var tr = getWidgetTableTr(linkify(row), subRow(row));
+					addEl(tbody, tr);
+				}
+			}
+			
+			if (longevityId != null){
+				var row = [getWidgetData(tabName, 'longevitymap', row, 'longevitydb_id'),
+							getWidgetData(tabName, 'longevitymap', row, 'association'),
+							getWidgetData(tabName, 'longevitymap', row, 'population'),
+							getWidgetData(tabName, 'longevitymap', row, 'rsid'),
+							getWidgetData(tabName, 'longevitymap', row, 'genes'),
+							getWidgetData(tabName, 'longevitymap', row, 'pmid')
+				];
+				addRow(row, tbody);
 				
+			} else {
+				var rows = info.split("____");
+				for (var r = 0; r < rows.length;r++){
+					var row = rows[r].split("__");
+					addRow(row, tbody);
+					//var tr = getWidgetTableTr(linkify(row), subRow(row));
+					//addEl(tbody, tr);
+					
+				}
 			}
 		
 			addEl(div, addEl(table, tbody));
