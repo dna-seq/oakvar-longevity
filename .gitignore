@@ -24,3 +24,4 @@ dist/*
 notebooks/.ipynb_checkpoints
 release.html
 annotators/longevitymap/__pycache__
+data/input/bases
