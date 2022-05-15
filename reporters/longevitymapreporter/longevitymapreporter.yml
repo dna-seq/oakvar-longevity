@@ -1,0 +1,17 @@
+title: Longevity Map Reporter
+version: 0.0.1
+type: reporter
+description: Create report with longevity information
+output_filename_schema:
+- '{run_name}.report.html'
+developer:
+  name: DNA-seq
+  organization: DNA-seq
+  email: karmazinalex@gmail.com
+  website: https://github.com/dna-seq/opencravat-longevity
+  citation: ''
+private: false
+hidden: false
+tags:
+- input/output
+- reporters

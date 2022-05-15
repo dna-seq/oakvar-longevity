@@ -1,0 +1,30 @@
+<!doctype html>
+
+<html lang="en">
+<head>
+	<meta charset="utf-8">
+	<style>
+		table, th, td {
+		  border: 1px solid black;
+		}
+		thead {font-weight: bold; background-color:#dddddd}
+		tbody{background-color:#eeeeee}
+		th, td {
+		  padding: 10px;
+		}
+</style>
+</head>
+
+<body>
+	<h1 align="center">Significant variations.</h1>
+	<br/>
+	<table width="80%" align="center">
+		<thead>
+			<tr><td>ID</td><td>Significe</td><td>Population</td><td>RSID</td><td>Gene</td><td>PubMed Id</td></tr>
+		</thead>
+		<tbody>
+			{DATA_START}<tr><td>{ID}</td><td>{SIGNIFICANC}</td><td>{POPULATION}</td><td>{SNP}</td><td>{GENE}</td><td>{PUBMED}</td></tr>{DATA_END}
+		</tbody>
+	</table>
+</body>
+</html>
