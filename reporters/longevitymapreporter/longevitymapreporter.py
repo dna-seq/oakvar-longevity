@@ -15,7 +15,7 @@ class Reporter(CravatReport):
     last_col = 0
     is_longevitymap = False
     template_text = ""
-    data = {"DATA":{"ID":[], "SIGNIFICANC":[], "POPULATION":[], "SNP":[], "GENE":[], "PUBMED":[]}}
+    data = {"DATA":{"ID":[], "SIGNIFICANCE":[], "POPULATION":[], "SNP":[], "GENE":[], "PUBMED":[], "DESCRIPTION":[]}}
     # data0 = data["DATA"]
 
     def setup(self):
@@ -43,6 +43,21 @@ class Reporter(CravatReport):
                 self.last_col = module['lastcol']
                 self.is_longevitymap = True
 
+    def _createSubTable(self, text):
+        if text is None:
+            return ""
+        html = "<table>\n"
+        html += "<tr><td>ID</td><td>Significance</td><td>Population</td><td>RSID</td><td>Gene</td><td>PubMed Id</td></tr>"
+        rows = text.split("____")
+        for row in rows:
+            html += "<tr>"
+            parts = row.split("__")
+            for part in parts:
+                html += "<td>"+part+"</td>"
+            html += "</tr>"
+        html += "</table>\n<br/>"
+        return html
+
     def write_table_row(self, row):
         # write_table_row is called once for each variant. row is a list of
         # values. The order or row matches with self.colinfo[level]['columns']
@@ -53,11 +68,14 @@ class Reporter(CravatReport):
         if len(row) >= end:
             if self.is_longevitymap and row[start + 1] == "significant":
                 self.data["DATA"]["ID"].append(row[start])
-                self.data["DATA"]["SIGNIFICANC"].append(row[start + 1])
+                self.data["DATA"]["SIGNIFICANCE"].append(row[start + 1])
                 self.data["DATA"]["POPULATION"].append(row[start + 2])
                 self.data["DATA"]["SNP"].append(row[start + 3])
                 self.data["DATA"]["GENE"].append(row[start + 4])
                 self.data["DATA"]["PUBMED"].append(row[start + 5])
+                temp = self._createSubTable(row[start + 6])
+                temp += row[start + 7].replace("____", "<br/>").replace("__", " ")
+                self.data["DATA"]["DESCRIPTION"].append(temp)
                 # str_row = [str(x) for x in row[start:end]]
                 # line = '\t'.join(str_row)
                 # self.outfile.write(line + '\n')

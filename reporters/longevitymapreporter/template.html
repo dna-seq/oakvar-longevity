@@ -13,6 +13,56 @@
 		  padding: 10px;
 		}
 </style>
+<script>
+function expand(obj){
+	var tdEl = obj.children[0];
+	var el = obj.nextSibling;
+	if (el.nodeName == "#text")
+		el = el.nextSibling;
+
+	el.style.display = "";
+	tdEl.innerHTML = "-";
+	obj.style.backgroundColor = "#e0e0e0";
+}
+
+function collapse(obj){
+	var tdEl = obj.children[0];
+	var el = obj.nextSibling;
+	if (el.nodeName == "#text")
+		el = el.nextSibling;
+		
+	el.style.display = "none";
+	tdEl.innerHTML = "+";
+	obj.style.backgroundColor = "#eeeeee";
+}
+
+function doOnClick(obj){
+	var tdEl = obj.children[0];
+	var el = obj.nextSibling;
+	if (el.nodeName == "#text")
+		el = el.nextSibling;
+
+	if(el.style.display == "none")
+		expand(obj);
+	else 
+		collapse(obj);
+}
+
+function collapseExpandAll(obj){
+	var el = document.getElementById("signTBody");
+	if(obj.innerHTML == "+"){
+		for(var i in el.children)
+			if(el.children[i].children && el.children[i].children.length > 3)
+				expand(el.children[i]);
+		obj.innerHTML = "-";
+	} else {
+		for(var i in el.children)
+			if(el.children[i].children && el.children[i].children.length > 3)
+				collapse(el.children[i]);
+		obj.innerHTML = "+";
+	}
+}
+</script>
 </head>
 
 <body>
@@ -20,10 +70,12 @@
 	<br/>
 	<table width="80%" align="center">
 		<thead>
-			<tr><td>ID</td><td>Significe</td><td>Population</td><td>RSID</td><td>Gene</td><td>PubMed Id</td></tr>
+			<tr><td style="width:2%;" onclick="collapseExpandAll(this)">+</td><td style="width:5%;">ID</td><td style="width:7%;">Significance</td><td>Population</td><td style="width:10%;">RSID</td><td style="width:10%;">Gene</td><td style="width:10%;">PubMed Id</td></tr>
 		</thead>
-		<tbody>
-			{DATA_START}<tr><td>{ID}</td><td>{SIGNIFICANC}</td><td>{POPULATION}</td><td>{SNP}</td><td>{GENE}</td><td>{PUBMED}</td></tr>{DATA_END}
+		<tbody id="signTBody">
+			{DATA_START}<tr onclick="doOnClick(this)"><td>+</td><td>{ID}</td><td>{SIGNIFICANCE}</td><td>{POPULATION}</td><td>{SNP}</td><td>{GENE}</td><td>{PUBMED}</td></tr>
+			<tr style="display:none;"><td colspan="7">{DESCRIPTION}</td></tr>
+			{DATA_END}
 		</tbody>
 	</table>
 </body>
