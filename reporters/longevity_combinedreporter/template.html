@@ -1,0 +1,114 @@
+<!doctype html>
+
+<html lang="en">
+<head>
+	<meta charset="utf-8">
+	<style>
+		table, th, td {
+		  border: 1px solid black;
+		}
+		thead {font-weight: bold; background-color:#dddddd}
+		tbody{background-color:#eeeeee}
+		th, td {
+		  padding: 10px;
+		}
+		.clickable:hover {cursor:pointer; background-color:#e0e0e0;}
+</style>
+<script>
+function expand(obj){
+	var tdEl = obj.children[0];
+	var el = obj.nextSibling;
+	if (el.nodeName == "#text")
+		el = el.nextSibling;
+
+	el.style.display = "";
+	tdEl.innerHTML = "-";
+	//obj.style.backgroundColor = "#e0e0e0";
+}
+
+function collapse(obj){
+	var tdEl = obj.children[0];
+	var el = obj.nextSibling;
+	if (el.nodeName == "#text")
+		el = el.nextSibling;
+		
+	el.style.display = "none";
+	tdEl.innerHTML = "+";
+	//obj.style.backgroundColor = "#eeeeee";
+}
+
+function doOnClick(obj){
+	var tdEl = obj.children[0];
+	var el = obj.nextSibling;
+	if (el.nodeName == "#text")
+		el = el.nextSibling;
+
+	if(el.style.display == "none")
+		expand(obj);
+	else 
+		collapse(obj);
+}
+
+function collapseExpandAll(obj, id){
+	var el = document.getElementById(id);
+	if(obj.innerHTML == "+"){
+		for(var i in el.children)
+			if(el.children[i].children && el.children[i].children.length > 3)
+				expand(el.children[i]);
+		obj.innerHTML = "-";
+	} else {
+		for(var i in el.children)
+			if(el.children[i].children && el.children[i].children.length > 3)
+				collapse(el.children[i]);
+		obj.innerHTML = "+";
+	}
+}
+</script>
+</head>
+
+<body>
+	<h1 align="center">Longevity significant variations.</h1>
+	<br/>
+	Obisety PRS sum:{PGS001298SUM}, count:{PGS001298COUNT}, average:{PGS001298AVG}
+	<br/>
+	<table width="80%" align="center">
+		<thead>
+			<tr><td class="clickable" onclick="collapseExpandAll(this, 'longTBody')">+</td><td>ID</td>
+				<td>Significance</td><td>Population</td><td>RSID</td><td>Gene</td>
+				<td >PubMed Id</td><td>Coding</td><td>Sequence Ontology</td><td>Protein change</td><td>Ref</td>
+				<td>Alt</td><td>cDNA Change</td><td>Rank score</td><td>Deseases names</td><td>Zygosity</td>
+			</tr>
+		</thead>
+		<tbody id="longTBody">
+			{LONGEVITY_START}<tr class="clickable" onclick="doOnClick(this)"><td>+</td><td>{ID}</td><td>{SIGNIFICANCE}</td>
+				<td>{POPULATION}</td><td><a href="https://www.ncbi.nlm.nih.gov/snp/{SNP}">{SNP}</a></td>
+				<td><a href="https://genomics.senescence.info/longevity/gene.php?id={GENE}">{GENE}</a></td>
+				<td><a href="https://pubmed.ncbi.nlm.nih.gov/{PUBMED}">{PUBMED}</a></td><td>{CODING}</td><td>{SEQONTOLOGY}</td>
+				<td>{PROTCHANGE}</td><td>{REF}</td><td>{ALT}</td><td>{CDNACHANGE}</td><td>{RANKSCOR}</td><td>{DESEASES}</td>
+				<td>{ZEGOT}</td>
+			</tr>
+			<tr style="display:none;"><td colspan="16">{DESCRIPTION}</td></tr>
+			{LONGEVITY_END}
+		</tbody>
+	</table>
+	<br/>
+	<h1 align="center">Cancer Report</h1>
+	<br/>
+	<table width="80%" align="center">
+		<thead>
+			<tr><td style="width:1%" class="clickable" onclick="collapseExpandAll(this, 'cancTBody')">+</td><td>#</td>
+				<td>Chrom</td><td>Position</td><td>Gene</td><td>RSID</td><td>cDNA Change</td><td>Zygosity</td>
+				<td>Allele Frequency</td><td>Phenotype Name</td><td>Significance</td></tr>
+		</thead>
+		<tbody id="cancTBody">
+			{CANCER_START}<tr class="clickable" onclick="doOnClick(this)"><td>+</td><td>{IND}</td><td>{CHROM}</td>
+				<td>{POS}</td><td><a href="https://genomics.senescence.info/longevity/gene.php?id={GENE}">{GENE}</a></td>
+				<td><a href="https://www.ncbi.nlm.nih.gov/snp/{RSID}">{RSID}</a></td>
+				<td>{CDNACHANGE}</td><td>{ZEGOT}</td><td>{ALELFREQ}</td>
+				<td>{PHENOTYPE}</td><td>{SIGNIFICANCE}</td></tr>
+			<tr style="display:none;"><td colspan="11">{NCBI}</td></tr>
+			{CANCER_END}
+		</tbody>
+	</table>
+</body>
+</html>

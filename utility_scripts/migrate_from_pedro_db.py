@@ -234,6 +234,18 @@ try:
 except Error as e:
     print(e)
 
+f = open("post_fixes.sql")
+sql_updates = f.read()
+f.close()
+
+try:
+    c = conn.cursor()
+    c.executescript(sql_updates)
+except Error as e:
+    print(e)
+
+print("SQL post fixes Finished")
+
 
 db.close()
 conn.commit()
