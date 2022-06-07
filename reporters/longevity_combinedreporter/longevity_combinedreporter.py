@@ -234,9 +234,12 @@ class Reporter(CravatReport):
         # end is called last. Use it to close the output file and
         # return a path to the output file.
         # print(self.data)
+        avg = 0
+        if self.PGS001298_count > 0:
+            avg = self.PGS001298_sum/(self.PGS001298_count*2)
         text = templater.replace_symbols(self.template_text,
             {"PGS001298SUM": str(self.PGS001298_sum), "PGS001298COUNT": str(self.PGS001298_count),
-             "PGS001298AVG": str(self.PGS001298_sum/(self.PGS001298_count*2))})
+             "PGS001298AVG": str(avg)})
         text = templater.replace_loop(text, self.data)
         self.outfile.write(text)
         self.outfile.close()
