@@ -55,11 +55,13 @@ VALUES
 (?,?);
 """
 
+sql_create_index = """CREATE INDEX rsid_index on position (rsid, alt);"""
+
 RSID = "rsID"
 CHROM = "chr_name"
 POSITION = "chr_position"
-REF = "effect_allele"
-ALT = "other_allele"
+ALT = "effect_allele"
+REF = "other_allele"
 WEIGHT = "effect_weight"
 
 class InsertHelper:
@@ -155,6 +157,7 @@ if __name__ == "__main__":
     execute_sql(conn, sql_create_position)
     execute_sql(conn, sql_create_wieghts)
     execute_sql(conn, sql_create_prs)
+    execute_sql(conn, sql_create_index)
 
     parse_prs("PGS001298.txt", conn, "Obesity PRS", "PGS001298")
     conn.commit()
