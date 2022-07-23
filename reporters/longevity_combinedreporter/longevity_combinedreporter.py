@@ -12,7 +12,8 @@ import templater
 
 class Reporter(CravatReport):
     template_text = ""
-    data = {"CANCER":{"IND":[], "CHROM":[], "POS":[], "GENE":[], "RSID":[], "CDNACHANGE":[], "ZEGOT":[], "ALELFREQ":[],
+    data = {"PRS":{"NAME":[], "SUM":[], "AVG":[], "COUNT":[]},
+            "CANCER":{"IND":[], "CHROM":[], "POS":[], "GENE":[], "RSID":[], "CDNACHANGE":[], "ZEGOT":[], "ALELFREQ":[],
                       "PHENOTYPE":[], "SIGNIFICANCE":[], "NCBI":[]},
             "LONGEVITY":{"ID":[], "SIGNIFICANCE":[], "POPULATION":[], "SNP":[], "GENE":[], "PUBMED":[], "DESCRIPTION":[],
                          "CODING":[], "SEQONTOLOGY":[], "PROTCHANGE":[], "REF":[], "ALT":[], "CDNACHANGE":[], "RANKSCOR":[],
@@ -40,6 +41,13 @@ class Reporter(CravatReport):
     is_longevitymap = False
     PGS001298_sum = 0
     PGS001298_count = 0
+    prs = {}
+    prs_names = ["PGS001298",
+                  "PGS001017",
+                  "PGS001185",
+                  "PGS001252",
+                  "PGS001833"
+                 ]
 
     def _createSubTable(self, text):
         if text is None:
@@ -93,6 +101,9 @@ class Reporter(CravatReport):
         with open(cur_path+"/genes.txt") as f:
             self.genes = set(f.read().split("\n"))
 
+        for name in self.prs_names:
+            self.prs[name] = {"sum":0, "count":0}
+
 
     def write_header(self, level):
         # write_header is called once per level. Use it to write
@@ -130,17 +141,22 @@ class Reporter(CravatReport):
         return ''
 
     def write_prs(self, row):
-        weight = self.get_value(row, 'prs__PGS001298')
-        if weight is None or weight == "":
-            return
-
-        weight = float(weight)
         zygot = self.get_value(row, 'vcfinfo__zygosity')
-        if zygot == 'hom':
-            weight = 2*weight
+        for name in self.prs_names:
+            weight = self.get_value(row, 'prs__'+name)
+            if weight is None or weight == "":
+                continue
 
-        self.PGS001298_sum += weight
-        self.PGS001298_count += 1
+            weight = float(weight)
+
+            if zygot == 'hom':
+                weight = 2*weight
+
+            self.prs[name]["sum"] += weight
+            self.prs[name]["count"] += 1
+
+        # self.PGS001298_sum += weight
+        # self.PGS001298_count += 1
 
 
     def write_longevity_row(self, row):
@@ -234,13 +250,22 @@ class Reporter(CravatReport):
         # end is called last. Use it to close the output file and
         # return a path to the output file.
         # print(self.data)
-        avg = 0
-        if self.PGS001298_count > 0:
-            avg = self.PGS001298_sum/(self.PGS001298_count*2)
-        text = templater.replace_symbols(self.template_text,
-            {"PGS001298SUM": str(self.PGS001298_sum), "PGS001298COUNT": str(self.PGS001298_count),
-             "PGS001298AVG": str(avg)})
-        text = templater.replace_loop(text, self.data)
+        # avg = 0
+        # if self.PGS001298_count > 0:
+        #     avg = self.PGS001298_sum/(self.PGS001298_count*2)
+
+        for name in self.prs_names:
+            if self.prs[name]["count"] > 0:
+                self.data["PRS"]["NAME"].append(name)
+                self.data["PRS"]["SUM"].append(self.prs[name]["sum"])
+                self.data["PRS"]["AVG"].append(self.prs[name]["sum"] / (self.prs[name]["count"]*2))
+                self.data["PRS"]["COUNT"].append(self.prs[name]["count"])
+
+
+        # text = templater.replace_symbols(self.template_text,
+        #     {"PGS001298SUM": str(self.PGS001298_sum), "PGS001298COUNT": str(self.PGS001298_count),
+        #      "PGS001298AVG": str(avg)})
+        text = templater.replace_loop(self.template_text, self.data)
         self.outfile.write(text)
         self.outfile.close()
         return os.path.realpath(self.outfile.name)

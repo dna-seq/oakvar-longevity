@@ -1,4 +1,5 @@
 import sys
+import time
 
 from cravat import BaseAnnotator
 from cravat import InvalidData
@@ -6,6 +7,10 @@ from cravat import InvalidData
 class CravatAnnotator(BaseAnnotator):
     # start_counter = 0
     # end_counter = 0
+    sql_time = 0
+    other_time = 0
+    sql_count = 0
+    other_count = 0
 
     def setup(self):
         """
@@ -50,24 +55,48 @@ class CravatAnnotator(BaseAnnotator):
         else:
             return None
 
-        query = f"SELECT weight FROM position, prs, weights WHERE chrom = '{input_data['chrom']}' AND alt = '{input_data['alt_base']}'" \
-                f" AND rsid = '{rsid}' AND weights.posid = position.id AND weights.prsid = prs.id AND prs.number = 'PGS001298'"
+        # query = f"SELECT weight FROM position, prs, weights WHERE chrom = '{input_data['chrom']}' AND alt = '{input_data['alt_base']}'" \
+        #         f" AND rsid = '{rsid}' AND weights.posid = position.id AND weights.prsid = prs.id AND prs.number = 'PGS001298'"
 
+        query = f"SELECT prs.number, weights.weight FROM position, prs, weights WHERE chrom = '{input_data['chrom']}' AND alt = '{input_data['alt_base']}'" \
+                    f" AND rsid = '{rsid}' AND weights.posid = position.id AND weights.prsid = prs.id"
+        start = time.time_ns()
         self.cursor.execute(query)
-        rows = self.cursor.fetchone()
+        rows = self.cursor.fetchall()
+        self.sql_time += time.time_ns() - start
+        self.sql_count += 1
 
         if rows is None or len(rows) == 0:
             return None
 
-        print(rows[0])
+        result = {"PGS001298":"",
+                  "PGS001017":"",
+                  "PGS001185":"",
+                  "PGS001252":"",
+                  "PGS001833":""
+                 }
+        start = time.time_ns()
+        for row in rows:
+            result[row[0]] = str(row[1])
+        self.other_time += time.time_ns() - start
+        self.other_count += 1
 
-        return {
-            'PGS001298': str(rows[0])
-        }
+        return result
+
+        # return {
+        #     'PGS001298': str(rows[0])
+        # }
 
         pass
 
     def cleanup(self):
+        print("sql_time sum:", self.sql_time)
+        print("sql_time:", self.sql_time/self.sql_count)
+        print("sql_count:", self.sql_count)
+
+        print("other_time sum:", self.other_time)
+        print("other_time:", self.other_time / self.other_count)
+        print("other_count:", self.other_count)
         # print("start_counter:", self.start_counter)
         # print("end_counter:", self.end_counter)
         """

@@ -55,7 +55,9 @@ VALUES
 (?,?);
 """
 
-sql_create_index = """CREATE INDEX rsid_index on position (rsid, alt);"""
+sql_create_rsid_index = """CREATE INDEX IF NOT EXISTS rsid_index on position (rsid, alt, chrom);"""
+sql_create_prsid_index = """CREATE INDEX IF NOT EXISTS  prsid_index ON weights (prsid);"""
+sql_create_posid_index = """CREATE INDEX IF NOT EXISTS  posid_index ON weights (posid);"""
 
 RSID = "rsID"
 CHROM = "chr_name"
@@ -78,31 +80,18 @@ class InsertHelper:
 
 
 def select_one(conn, sql):
-    try:
-        c = conn.cursor()
-        c.execute(sql)
-        return c.fetchone()
-    except Error as e:
-        print(e)
-        print(sql)
+    c = conn.cursor()
+    c.execute(sql)
+    return c.fetchone()
 
 def execute_sql(conn, sql):
-    try:
-        c = conn.cursor()
-        c.execute(sql)
-    except Error as e:
-        print(e)
-        print(sql)
+    c = conn.cursor()
+    c.execute(sql)
 
 def insert_sql(conn, sql, task):
-    try:
-        c = conn.cursor()
-        c.execute(sql, task)
-        return c.lastrowid
-    except Error as e:
-        print(e)
-        print(sql)
-        print(task)
+    c = conn.cursor()
+    c.execute(sql, task)
+    return c.lastrowid
 
 def parse_header(line):
     header = line.split("\t")
@@ -124,13 +113,23 @@ def process_position(conn, ins):
             chrom = "chrM"
         else:
             chrom = f"chr{chrom}"
-        id = insert_sql(conn, sql_insert_position, (ins.get(RSID), chrom, int(ins.get(POSITION)), ins.get(REF), ins.get(ALT)))
+
+        pos = 0
+        if ins.get(POSITION).strip() != "":
+            try:
+                pos = int(ins.get(POSITION))
+            except ValueError as e:
+                print(e)
+
+        id = insert_sql(conn, sql_insert_position, (ins.get(RSID), chrom, pos, ins.get(REF), ins.get(ALT)))
     else:
         id = id[0]
     return id
 
 def parse_prs(file_path, conn, prs_name, prs_number):
     prsid = insert_sql(conn, sql_insert_prs, (prs_name, prs_number))
+    processed = 0
+    total = 0
 
     is_header = True
     header = None
@@ -143,23 +142,43 @@ def parse_prs(file_path, conn, prs_name, prs_number):
                 header = parse_header(line)
                 is_header = False
                 continue
+            total += 1
             parts = line.split("\t")
-            if len(parts) < len(header):
+            if len(parts) < 6:
                 continue
             ins = InsertHelper(header, parts)
             if ins.get(WEIGHT).strip() == "":
                 continue
-            posid = process_position(conn, ins)
-            insert_sql(conn, sql_insert_weights, (float(ins.get(WEIGHT)), posid, prsid))
+            if ins.get(RSID).strip() == "" or not ins.get(RSID).startswith("rs"):
+                continue
+            try:
+                posid = process_position(conn, ins)
+                insert_sql(conn, sql_insert_weights, (float(ins.get(WEIGHT)), posid, prsid))
+                processed += 1
+            except Error as e:
+                print("Error on line: ", line)
+                print(e)
+                continue
+        print(prs_number)
+        print("total:", total)
+        print("processed:", processed)
+
 
 if __name__ == "__main__":
     conn = sqlite3.connect(r"prs.sqlite")
     execute_sql(conn, sql_create_position)
     execute_sql(conn, sql_create_wieghts)
     execute_sql(conn, sql_create_prs)
-    execute_sql(conn, sql_create_index)
+    execute_sql(conn, sql_create_rsid_index)
+    execute_sql(conn, sql_create_posid_index)
+    execute_sql(conn, sql_create_prsid_index)
 
     parse_prs("PGS001298.txt", conn, "Obesity PRS", "PGS001298")
+    parse_prs("PGS001017.txt", conn, "Nervous measurement PRS", "PGS001017")
+    parse_prs("PGS001185.txt", conn, "Intraocular pressure PRS", "PGS001185")
+    parse_prs("PGS001252.txt", conn, "Hearing difficulty and deafness PRS", "PGS001252")
+    parse_prs("PGS001833.txt", conn, "Retinal detachments and defects PRS", "PGS001833")
+
     conn.commit()
     conn.close()
     print("Finish")

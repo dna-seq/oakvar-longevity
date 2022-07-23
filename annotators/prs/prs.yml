@@ -22,14 +22,20 @@ requires:
 # The columns are defined in a list. Each column has three required keys:
 # name, title, and type.
 output_columns:
-  # name is the internal name and is the key used to identify the column in the
-  # dictionary returned by the annotate method of annotator_name.py
 - name: PGS001298
-  # title is the display name of this column, similar to the title of the module.
-  # It can be changed without affecting the functionality of CRAVAT
   title: Obesity Score
-  # type is the data type of the value. It is primarily used when storing the 
-  # results in a database. It may be one of string, int, or float.
+  type: string
+- name: PGS001017
+  title: Nervous measurement PRS
+  type: string
+- name: PGS001185
+  title: Intraocular pressure PRS
+  type: string
+- name: PGS001252
+  title: Hearing difficulty and deafness PRS
+  type: string
+- name: PGS001833
+  title: Retinal detachments and defects PRS
   type: string
 
 #Annotators can be piped together so that the output of one annotator can be used in the input of another annotator. 
