@@ -101,21 +101,20 @@ function acordion(obj){
 
 	<table width="80%" align="center">
 		<thead>
-			<tr><td class="clickable" onclick="collapseExpandAll(this, 'longTBody')">+</td><td>ID</td>
-				<td>Population</td><td>RSID</td><td>Gene</td>
-				<td >PubMed Id</td><td>Coding</td><td>Sequence Ontology</td><td>Protein change</td><td>Ref</td>
-				<td>Alt</td><td>cDNA Change</td><td>Rank score</td><td>Deseases names</td><td>Zygosity</td>
+			<tr><td class="clickable" onclick="collapseExpandAll(this, 'longTBody')">+</td>
+				<td>RSID</td><td>Population</td><td>Gene</td>
+				<td>Ref</td><td>Alt</td><td>Zygosity</td>
 			</tr>
 		</thead>
 		<tbody id="longTBody">
-			{LONGEVITY_START}<tr class="clickable" onclick="doOnClick(this)"><td>+</td><td>{ID}</td>
-				<td>{POPULATION}</td><td><a href="https://www.ncbi.nlm.nih.gov/snp/{SNP}">{SNP}</a></td>
+			{LONGEVITY_START}<tr class="clickable" onclick="doOnClick(this)"><td>+</td>
+				<td><a href="https://www.ncbi.nlm.nih.gov/snp/{SNP}">{SNP}</a></td><td>{POPULATION}</td>
 				<td><a href="https://genomics.senescence.info/longevity/gene.php?id={GENE}">{GENE}</a></td>
-				<td><a href="https://pubmed.ncbi.nlm.nih.gov/{PUBMED}">{PUBMED}</a></td><td>{CODING}</td><td>{SEQONTOLOGY}</td>
-				<td>{PROTCHANGE}</td><td>{REF}</td><td>{ALT}</td><td>{CDNACHANGE}</td><td>{RANKSCOR}</td><td>{DESEASES}</td>
-				<td>{ZEGOT}</td>
+				<td>{REF}</td><td>{ALT}</td><td>{ZEGOT}</td>
 			</tr>
-			<tr style="display:none;"><td colspan="15">{DESCRIPTION}</td></tr>
+			<tr style="display:none;"><td colspan="7">cDNA change:{CDNACHANGE}<br/>
+				Substitution frequency (GnomAD):{ALELFREQ}<br/>
+				{DESCRIPTION}</td></tr>
 			{LONGEVITY_END}
 		</tbody>
 	</table>

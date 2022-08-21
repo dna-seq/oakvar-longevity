@@ -3,7 +3,7 @@ title: LongevityMap Annotator
 
 # 'version' is the version of the annotator. It is primarily used when 
 # publishing a module, but is required for all modules.
-version: 0.0.5
+version: 0.1.0
 
 # 'type' is the type of module described by this .yml file. In this case it is
 # 'annotator'
@@ -12,11 +12,11 @@ type: annotator
 # 'level' is 'variant' or 'gene'
 level: variant
 
-#secondary_inputs:
-#  dbsnp: {}
-#
-#requires:
-#- dbsnp
+secondary_inputs:
+  dbsnp: {}
+
+requires:
+- dbsnp
 
 # output_columns has the columns that will be included in the output file.
 # The columns are defined in a list. Each column has three required keys:
@@ -57,6 +57,27 @@ output_columns:
   title: Description
   type: string
   hidden: true
+
+- name: allele
+  title: allele
+  type: string
+  hidden: true
+- name: state
+  title: state
+  type: string
+  hidden: true
+- name: zygosity
+  title: zygosity
+  type: string
+  hidden: true
+- name: weight
+  title: weight
+  type: string
+  hidden: true
+
+
+
+
 
 #Annotators can be piped together so that the output of one annotator can be used in the input of another annotator. 
 #secondary_inputs:

@@ -2,6 +2,7 @@ import sys
 import os
 import sqlite3
 import pandas
+import time
 
 from cravat import BaseAnnotator
 from cravat import InvalidData
@@ -79,6 +80,16 @@ class CravatAnnotator(BaseAnnotator):
 
         return record
 
+
+    def merge_rows(self, rows):
+        res = [str(el) for el in rows[0]]
+        for i in range(1, len(rows)):
+            for j, item in enumerate(rows[i]):
+                res[j] += ","+str(item)
+
+        return res
+
+
     def annotate(self, input_data, secondary_data=None):
         """
         The annotator parent class will call annotate for each line of the
@@ -120,19 +131,50 @@ class CravatAnnotator(BaseAnnotator):
         #         'FROM longevitymap, snps WHERE chrom = "{chrom}" AND pos = {pos} AND ref = "{ref}" AND alt = "{alt}" ' \
         #         'AND longevitymap.rsid = snps.rsid'.format(
         #     chrom = input_data["chrom"], pos = int(input_data["pos"]), ref = input_data["ref_base"], alt = input_data["alt_base"])
+
+        if secondary_data['dbsnp'] and secondary_data['dbsnp'][0] is not None:
+            rsid = secondary_data['dbsnp'][0]['rsid']
+        else:
+            return None
+
+        # 'allele_weights.allele, allele_weights.state, allele_weights.zygosity, allele_weights.weight' \
+
+        # query = 'SELECT variant.id, association, population.name, identifier, symbol, quickpubmed, study_design, conclusions ' \
+        #         'FROM variant, snps, population, gene WHERE chrom = "{chrom}" AND pos = {pos} AND ref = "{ref}" AND alt = "{alt}" ' \
+        #         'AND variant.identifier = snps.rsid AND variant.population_id = population.id AND variant.gene_id = gene.id'.format(
+        #     chrom=input_data["chrom"], pos=int(input_data["pos"]), ref=input_data["ref_base"], alt=input_data["alt_base"])
         query = 'SELECT variant.id, association, population.name, identifier, symbol, quickpubmed, study_design, conclusions ' \
-                'FROM variant, snps, population, gene WHERE chrom = "{chrom}" AND pos = {pos} AND ref = "{ref}" AND alt = "{alt}" ' \
-                'AND variant.identifier = snps.rsid AND variant.population_id = population.id AND variant.gene_id = gene.id'.format(
-            chrom=input_data["chrom"], pos=int(input_data["pos"]), ref=input_data["ref_base"], alt=input_data["alt_base"])
+                'FROM variant, population, gene, allele_weights WHERE  '\
+                'variant.identifier = "{rsid}" AND variant.population_id = population.id AND variant.gene_id = gene.id AND ' \
+                'allele_weights.rsid = variant.identifier AND allele_weights.allele = "{alt}" GROUP BY variant.id'.format(
+            rsid=rsid, alt=input_data["alt_base"])
+
+
+        # start = time.time_ns()
         self.cursor.execute(query)
         rows = self.cursor.fetchall()
+        # time_span = time.time_ns() - start
 
         if len(rows) == 0:
             return None
 
+        # print(rsid, "time:", time_span)
+
+        # start = time.time_ns()
         record = None
         for row in rows:
             record = self.merge_records(row, record)
+
+        query2 = 'SELECT allele, state, zygosity, weight FROM allele_weights WHERE rsid = "{rsid}"'.format(rsid=rsid)
+        self.cursor.execute(query2)
+        rows2 = self.cursor.fetchall()
+        allel_row = rows2[0]
+        if len(rows2) > 1:
+            allel_row = self.merge_rows(rows2)
+
+        # time_span = time.time_ns() - start
+        # print("loop time:", time_span)
+        # print("rows:", len(rows))
 
         return {
             'longevitydb_id': str(record[0]),
@@ -142,7 +184,11 @@ class CravatAnnotator(BaseAnnotator):
             'genes': str(record[4]),
             'pmid': str(record[5]),
             'info': str(record[6]),
-            'description': str(record[7])
+            'description': str(record[7]),
+            'allele': str(allel_row[0]),
+            'state': str(allel_row[1]),
+            'zygosity': str(allel_row[2]),
+            'weight': str(allel_row[3])
         }
 
         pass

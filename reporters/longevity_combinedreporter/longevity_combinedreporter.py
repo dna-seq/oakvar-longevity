@@ -17,7 +17,7 @@ class Reporter(CravatReport):
                       "PHENOTYPE":[], "SIGNIFICANCE":[], "NCBI":[]},
             "LONGEVITY":{"ID":[], "SIGNIFICANCE":[], "POPULATION":[], "SNP":[], "GENE":[], "PUBMED":[], "DESCRIPTION":[],
                          "CODING":[], "SEQONTOLOGY":[], "PROTCHANGE":[], "REF":[], "ALT":[], "CDNACHANGE":[], "RANKSCOR":[],
-                         "DESEASES":[], "ZEGOT":[]}}
+                         "DESEASES":[], "ZEGOT":[], "ALELFREQ":[]}}
     current_level = ""
     columns = None
     col_index = 0
@@ -179,6 +179,7 @@ class Reporter(CravatReport):
             self.data["LONGEVITY"]["RANKSCOR"].append(self.get_value(row, 'clinpred__rankscore'))
             self.data["LONGEVITY"]["DESEASES"].append(self.get_value(row, 'clinvar__disease_names'))
             self.data["LONGEVITY"]["ZEGOT"].append(self.get_value(row, 'vcfinfo__zygosity'))
+            self.data["LONGEVITY"]["ALELFREQ"].append(self.get_value(row, 'gnomad__af'))
 
 
     def write_cancer_row(self, row):
