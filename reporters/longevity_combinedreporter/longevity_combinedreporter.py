@@ -12,12 +12,13 @@ import templater
 
 class Reporter(CravatReport):
     template_text = ""
+    sorts = {"LONGEVITY":{"key":"PRIORITY", "type":"float", "reverse":"True"}}
     data = {"PRS":{"NAME":[], "SUM":[], "AVG":[], "COUNT":[]},
             "CANCER":{"IND":[], "CHROM":[], "POS":[], "GENE":[], "RSID":[], "CDNACHANGE":[], "ZEGOT":[], "ALELFREQ":[],
                       "PHENOTYPE":[], "SIGNIFICANCE":[], "NCBI":[]},
             "LONGEVITY":{"ID":[], "SIGNIFICANCE":[], "POPULATION":[], "SNP":[], "GENE":[], "PUBMED":[], "DESCRIPTION":[],
                          "CODING":[], "SEQONTOLOGY":[], "PROTCHANGE":[], "REF":[], "ALT":[], "CDNACHANGE":[], "RANKSCOR":[],
-                         "DESEASES":[], "ZEGOT":[], "ALELFREQ":[]}}
+                         "DESEASES":[], "ZEGOT":[], "ALELFREQ":[], "NUCLEOTIDES":[], "PRIORITY":[], "NCBIDESC":[]}}
     current_level = ""
     columns = None
     col_index = 0
@@ -158,6 +159,11 @@ class Reporter(CravatReport):
         # self.PGS001298_sum += weight
         # self.PGS001298_count += 1
 
+    def get_nucleotides(self, ref, alt, zygocity):
+        if zygocity == 'hom':
+            return alt+"/"+alt
+
+        return alt+"/"+ref
 
     def write_longevity_row(self, row):
         if self.is_longevitymap and self.get_value(row, 'longevitymap__association') == "significant":
@@ -180,6 +186,10 @@ class Reporter(CravatReport):
             self.data["LONGEVITY"]["DESEASES"].append(self.get_value(row, 'clinvar__disease_names'))
             self.data["LONGEVITY"]["ZEGOT"].append(self.get_value(row, 'vcfinfo__zygosity'))
             self.data["LONGEVITY"]["ALELFREQ"].append(self.get_value(row, 'gnomad__af'))
+            self.data["LONGEVITY"]["NUCLEOTIDES"].append(self.get_nucleotides(
+                self.get_value(row, 'base__ref_base'), self.get_value(row, 'base__alt_base'), self.get_value(row, 'vcfinfo__zygosity')))
+            self.data["LONGEVITY"]["PRIORITY"].append(self.get_value(row, 'longevitymap__priority'))
+            self.data["LONGEVITY"]["NCBIDESC"].append(self.get_value(row, 'ncbigene__ncbi_desc'))
 
 
     def write_cancer_row(self, row):
@@ -266,7 +276,7 @@ class Reporter(CravatReport):
         # text = templater.replace_symbols(self.template_text,
         #     {"PGS001298SUM": str(self.PGS001298_sum), "PGS001298COUNT": str(self.PGS001298_count),
         #      "PGS001298AVG": str(avg)})
-        text = templater.replace_loop(self.template_text, self.data)
+        text = templater.replace_loop(self.template_text, self.data, self.sorts)
         self.outfile.write(text)
         self.outfile.close()
         return os.path.realpath(self.outfile.name)

@@ -74,6 +74,11 @@ output_columns:
   title: weight
   type: string
   hidden: true
+- name: priority
+  title: priority
+  type: string
+  hidden: true
+
 
 
 

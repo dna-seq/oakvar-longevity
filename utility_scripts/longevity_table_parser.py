@@ -9,13 +9,14 @@ create_table = """ CREATE TABLE IF NOT EXISTS "allele_weights" (
 	"zygosity"	TEXT,
 	"weight"	REAL DEFAULT 0,
 	"rsid"	TEXT NOT NULL,
+	"priority" TEXT NOT NULL,
 	PRIMARY KEY("id")
 );"""
 
 sql_select_by_rsid = """SELECT ref, alt FROM snps WHERE rsid = """
 
-sql_insert_alt_weights = """INSERT INTO allele_weights (id, allele, state, zygosity, weight, rsid)
- VALUES (?,?,?,?,?,?);"""
+sql_insert_alt_weights = """INSERT INTO allele_weights (id, allele, state, zygosity, weight, rsid, priority)
+ VALUES (?,?,?,?,?,?,?);"""
 
 sql_table_names = """ SELECT name FROM sqlite_master WHERE type='table'; """
 
@@ -73,7 +74,7 @@ def filterVariants(variants, values, weight):
 
     return var_res, val_res
 
-def processVariants(cursor, variants, values, ref, rsid, idIndex):
+def processVariants(cursor, variants, values, ref, rsid, idIndex, priority):
     for i, variant in enumerate(variants):
         state = STATE_ALT
         zygocity = HETEROZYGOTH
@@ -92,7 +93,7 @@ def processVariants(cursor, variants, values, ref, rsid, idIndex):
             if variant[1] != ref:
                 allele = variant[1]
 
-        task = (idIndex, allele, state, zygocity, values[i], rsid)
+        task = (idIndex, allele, state, zygocity, values[i], rsid, priority)
         cursor.execute(sql_insert_alt_weights, task)
         idIndex += 1
 
@@ -128,7 +129,7 @@ errors = []
 norsids = []
 rsid_map = set()
 for i in range(length):
-    variant_id, rsid, variants, values, weight, skip = df.loc[i, ["id", "identifier", "genotypes", "Genotype longevity weight", "Gene prioritization", "Skip"]]
+    variant_id, rsid, variants, values, priority, skip = df.loc[i, ["id", "identifier", "genotypes", "Genotype longevity weight", "Gene prioritization", "Skip"]]
     if skip == 1.0:
         continue
 
@@ -138,7 +139,7 @@ for i in range(length):
         rsid_map.add(rsid)
 
     try:
-        variants, values = filterVariants(variants, values, weight)
+        variants, values = filterVariants(variants, values, priority)
     except IndexError as e:
         errors.append({"num":i, "var":variants, "val":values})
         continue
@@ -152,7 +153,7 @@ for i in range(length):
 
     ref = ref_alt[0][0]
 
-    idIndex = processVariants(cursor, variants, values, ref, rsid, idIndex)
+    idIndex = processVariants(cursor, variants, values, ref, rsid, idIndex, priority)
     print(i,"/",length)
 
 if len(errors) > 0:

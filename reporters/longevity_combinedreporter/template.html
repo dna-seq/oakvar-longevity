@@ -103,18 +103,23 @@ function acordion(obj){
 		<thead>
 			<tr><td class="clickable" onclick="collapseExpandAll(this, 'longTBody')">+</td>
 				<td>RSID</td><td>Population</td><td>Gene</td>
-				<td>Ref</td><td>Alt</td><td>Zygosity</td>
+				<td>Your genotype</td><td>Ref allele</td><td>Alt allele</td><td>Zygosity</td>
 			</tr>
 		</thead>
 		<tbody id="longTBody">
 			{LONGEVITY_START}<tr class="clickable" onclick="doOnClick(this)"><td>+</td>
 				<td><a href="https://www.ncbi.nlm.nih.gov/snp/{SNP}">{SNP}</a></td><td>{POPULATION}</td>
 				<td><a href="https://genomics.senescence.info/longevity/gene.php?id={GENE}">{GENE}</a></td>
-				<td>{REF}</td><td>{ALT}</td><td>{ZEGOT}</td>
+				<td>{NUCLEOTIDES}</td><td>{REF}</td><td>{ALT}</td><td>{ZEGOT}</td>
 			</tr>
-			<tr style="display:none;"><td colspan="7">cDNA change:{CDNACHANGE}<br/>
+			<tr style="display:none;"><td colspan="8">cDNA change:{CDNACHANGE}<br/>
 				Substitution frequency (GnomAD):{ALELFREQ}<br/>
-				{DESCRIPTION}</td></tr>
+				{DESCRIPTION}
+				<br/>
+				Gene Description ({GENE}):
+				<br/>
+				{NCBIDESC}
+			</td></tr>
 			{LONGEVITY_END}
 		</tbody>
 	</table>

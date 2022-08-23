@@ -165,10 +165,11 @@ class CravatAnnotator(BaseAnnotator):
         for row in rows:
             record = self.merge_records(row, record)
 
-        query2 = 'SELECT allele, state, zygosity, weight FROM allele_weights WHERE rsid = "{rsid}"'.format(rsid=rsid)
+        query2 = 'SELECT allele, state, zygosity, weight, priority FROM allele_weights WHERE rsid = "{rsid}"'.format(rsid=rsid)
         self.cursor.execute(query2)
         rows2 = self.cursor.fetchall()
         allel_row = rows2[0]
+        priority = allel_row[4]
         if len(rows2) > 1:
             allel_row = self.merge_rows(rows2)
 
@@ -188,7 +189,8 @@ class CravatAnnotator(BaseAnnotator):
             'allele': str(allel_row[0]),
             'state': str(allel_row[1]),
             'zygosity': str(allel_row[2]),
-            'weight': str(allel_row[3])
+            'weight': str(allel_row[3]),
+            'priority':str(priority)
         }
 
         pass
