@@ -5,19 +5,22 @@
 	<meta charset="utf-8">
 	<style>
 		table, th, td {
-		  border: 1px solid black;
+
 		}
 		.acordiv {
-			background-color:#dddddd;
+
 		}
 		.acordiv:hover {cursor:pointer; background-color:#d0d0d0;}
-		thead {font-weight: bold; background-color:#dddddd}
-		tbody{background-color:#eeeeee}
+		thead {font-weight: bold; }
+		
 		th, td {
 		  padding: 2px;
 		}
-		.clickable:hover {cursor:pointer; background-color:#e0e0e0;}
 </style>
+<!-- You MUST include jQuery before Fomantic -->
+<script src="https://cdn.jsdelivr.net/npm/jquery@3.3.1/dist/jquery.min.js"></script>
+<link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/fomantic-ui@2.8.8/dist/semantic.min.css">
+<script src="https://cdn.jsdelivr.net/npm/fomantic-ui@2.8.8/dist/semantic.min.js"></script>
 <script>
 function expand(obj){
 	var tdEl = obj.children[0];
@@ -26,7 +29,7 @@ function expand(obj){
 		el = el.nextSibling;
 
 	el.style.display = "";
-	tdEl.innerHTML = "-";
+	tdEl.innerHTML = "<div class=\"ui tiny circular compact negative button\">-</div>";
 	//obj.style.backgroundColor = "#e0e0e0";
 }
 
@@ -35,9 +38,9 @@ function collapse(obj){
 	var el = obj.nextSibling;
 	if (el.nodeName == "#text")
 		el = el.nextSibling;
-		
+
 	el.style.display = "none";
-	tdEl.innerHTML = "+";
+	tdEl.innerHTML = "<div class=\"ui tiny circular compact positive button\">+</div>";
 	//obj.style.backgroundColor = "#eeeeee";
 }
 
@@ -49,22 +52,22 @@ function doOnClick(obj){
 
 	if(el.style.display == "none")
 		expand(obj);
-	else 
+	else
 		collapse(obj);
 }
 
 function collapseExpandAll(obj, id){
 	var el = document.getElementById(id);
-	if(obj.innerHTML == "+"){
+	if(obj.innerHTML == "<div class=\"ui tiny circular compact positive button\">+</div>"){
 		for(var i in el.children)
 			if(el.children[i].children && el.children[i].children.length > 3)
 				expand(el.children[i]);
-		obj.innerHTML = "-";
+		obj.innerHTML = "<div class=\"ui tiny circular compact negative button\">-</div>";
 	} else {
 		for(var i in el.children)
 			if(el.children[i].children && el.children[i].children.length > 3)
 				collapse(el.children[i]);
-		obj.innerHTML = "+";
+		obj.innerHTML = "<div class=\"ui tiny circular compact positive button\">+</div>";
 	}
 }
 
@@ -99,26 +102,29 @@ function acordion(obj){
 	<h1 align="center">Longevity significant variations.</h1>
 	</div>
 
-	<table width="80%" align="center">
+	<table class="ui selectable celled teal table">
 		<thead>
-			<tr><td class="clickable" onclick="collapseExpandAll(this, 'longTBody')">+</td>
-				<td>RSID</td><td>Population</td><td>Gene</td>
-				<td>Your genotype</td><td>Ref allele</td><td>Alt allele</td><td>Zygosity</td>
+			<tr><th class="clickable title" onclick="collapseExpandAll(this, 'longTBody')"><div class="ui tiny circular compact positive button">+</div></th>
+				<th>RSID</th><th>Population</th><th>Gene</th>
+				<th>Your genotype</th><th>Ref allele</th><td>Alt allele</td><th>Zygosity</th>
+				<th>weight</th>
 			</tr>
 		</thead>
 		<tbody id="longTBody">
-			{LONGEVITY_START}<tr class="clickable" onclick="doOnClick(this)"><td>+</td>
+			{LONGEVITY_START}<tr class="clickable" onclick="doOnClick(this)">
+			<td><div class="ui tiny circular compact positive button">+</div></td>
 				<td><a href="https://www.ncbi.nlm.nih.gov/snp/{SNP}">{SNP}</a></td><td>{POPULATION}</td>
 				<td><a href="https://genomics.senescence.info/longevity/gene.php?id={GENE}">{GENE}</a></td>
 				<td>{NUCLEOTIDES}</td><td>{REF}</td><td>{ALT}</td><td>{ZEGOT}</td>
 			</tr>
-			<tr style="display:none;"><td colspan="8">cDNA change:{CDNACHANGE}<br/>
-				Substitution frequency (GnomAD):{ALELFREQ}<br/>
-				{DESCRIPTION}
-				<br/>
-				Gene Description ({GENE}):
-				<br/>
-				{NCBIDESC}
+			<tr style="display:none;"><td colspan="8">
+				 <table class="ui padded table">
+					 
+				<tr><th>cDNA change</th><td>{CDNACHANGE}</td></tr>
+				<tr><th>Substitution frequency (GnomAD)</th><td>{ALELFREQ}</td></tr>
+				<tr><td colspan="2">{DESCRIPTION}</td></tr>
+				<tr><th>Gene Description ({GENE})</th><td>{NCBIDESC}</td></tr>
+				</table>
 			</td></tr>
 			{LONGEVITY_END}
 		</tbody>
