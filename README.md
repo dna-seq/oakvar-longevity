@@ -44,7 +44,7 @@ The instructions above are provided for Linux and MacOS (note: in MacOS you have
 For Windows you can either install Linux Subsystem or use Windows version of anaconda.
 
 
-Installing moduals
+Installing modules
 --------------------
 
 First, read the [tutorial](https://open-cravat.readthedocs.io) about opencravat and locate the path to the modules directory:
@@ -58,7 +58,7 @@ Change to the module folder, for example:
 oc config md .
 ```
 
-Then activate github [update script](https://github.com/dna-seq/opencravat-longevity/blob/main/utility_scripts/gh_update.py) to download moduals to moduals path:
+Then activate github [update script](https://github.com/dna-seq/opencravat-longevity/blob/main/utility_scripts/gh_update.py) to download modules to moduals path:
 ```bash
 python gh_update.py --path YOUR_PATH
 ```
