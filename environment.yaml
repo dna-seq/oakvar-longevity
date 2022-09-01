@@ -4,13 +4,9 @@ channels:
   - bioconda
   - defaults
 dependencies:
-  - python=3.9
-  - jupyterlab
-  - papermill=2.3.3
+  - python=3.10
   - open-cravat=2.2.7
-  - numpy
-  - pandas
   - pip:
-      - pyfunctional
-      - pycomfort
+      - PyGithub
+      - cilck
 

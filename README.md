@@ -3,15 +3,20 @@
 Repository for longevity annotators for opencravat.
 
 The repository contains:
-* notebooks to preprocess the data. In the data:
-  **longevity_genes_original.csv** - original data from [https://genomics.senescence.info](https://genomics.senescence.info/longevity/)
+* annotators:
 
-  **longevity_genes_splitted_rs.csv** - filtered and splitted data with only rs, one rs per record
+  **longevitymap** - for longevity related information, original data from [https://genomics.senescence.info](https://genomics.senescence.info/longevity/)
+  
+  **prs** - for polygenic risk scores
+* reporters:
 
-  **longevity_genes_splitted_not_rs.csv** - filtered data without rs, there can be several variants per record or NaN
+  **longevity_combinedreporter** - outputs prs, longevity report, cancer report
+ 
+* webviewerwidgets:
 
-  **longevity_genes_splitted_all.csv** - all processed data in one file (just in case). It contains cases then rs and not-rs variants are located next to each other* annotator code
-* annotators/longevitymap
+  **wglongevitymap** - widget for presenting a detailed view for longevity annotator
+ 
+* other folders for preprocessing information for development purposes
 * environment.yaml file for conda environment
 
 ## setting up
@@ -38,20 +43,11 @@ micromamba activate opencravat-longevity
 The instructions above are provided for Linux and MacOS (note: in MacOS you have to install wget).
 For Windows you can either install Linux Subsystem or use Windows version of anaconda.
 
-Runing notebooks
---------------
 
-To run notebooks just activate the environment and type:
-```
-jupyter lab notebooks
-```
-
-Note: after folder renaming notebooks need fixing
-
-Writing an annotator
+Installing modules
 --------------------
 
-First, read the [tutorial](https://open-cravat.readthedocs.io/en/latest/Annotator-Tutorial.html) about opencravat annotations and locate the path to the modules directory:
+First, read the [tutorial](https://open-cravat.readthedocs.io) about opencravat and locate the path to the modules directory:
 
 ```base
 oc config md
@@ -60,5 +56,15 @@ oc config md
 Change to the module folder, for example:
 ```bash
 oc config md .
+```
+
+Then activate github [update script](https://github.com/dna-seq/opencravat-longevity/blob/main/utility_scripts/gh_update.py) to download modules to moduals path:
+```bash
+python gh_update.py --path YOUR_PATH
+```
+
+Run opencravat:
+```bash
+oc gui
 ```
 
