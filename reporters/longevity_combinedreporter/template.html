@@ -106,8 +106,8 @@ function acordion(obj){
 		<thead>
 			<tr><th class="clickable title" onclick="collapseExpandAll(this, 'longTBody')"><div class="ui tiny circular compact positive button">+</div></th>
 				<th>RSID</th><th>Population</th><th>Gene</th>
-				<th>Your genotype</th><th>Ref allele</th><td>Alt allele</td><th>Zygosity</th>
-				<th>weight</th>
+				<th>Your genotype</th><th>Ref allele</th><th>Alt allele</th><th>Zygosity</th>
+				<th>Weight</th>
 			</tr>
 		</thead>
 		<tbody id="longTBody">
@@ -115,7 +115,7 @@ function acordion(obj){
 			<td><div class="ui tiny circular compact positive button">+</div></td>
 				<td><a href="https://www.ncbi.nlm.nih.gov/snp/{SNP}">{SNP}</a></td><td>{POPULATION}</td>
 				<td><a href="https://genomics.senescence.info/longevity/gene.php?id={GENE}">{GENE}</a></td>
-				<td>{NUCLEOTIDES}</td><td>{REF}</td><td>{ALT}</td><td>{ZEGOT}</td>
+				<td>{NUCLEOTIDES}</td><td>{REF}</td><td>{ALT}</td><td>{ZEGOT}</td><td style="background-color:#{WEIGHTCOLOR}">{WEIGHT}</td>
 			</tr>
 			<tr style="display:none;"><td colspan="8">
 				 <table class="ui padded table">

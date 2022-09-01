@@ -12,13 +12,14 @@ import templater
 
 class Reporter(CravatReport):
     template_text = ""
-    sorts = {"LONGEVITY":{"key":"PRIORITY", "type":"float", "reverse":"True"}}
+    sorts = {"LONGEVITY":{"key":"WEIGHT", "type":"float", "reverse":"True"}}
     data = {"PRS":{"NAME":[], "SUM":[], "AVG":[], "COUNT":[]},
             "CANCER":{"IND":[], "CHROM":[], "POS":[], "GENE":[], "RSID":[], "CDNACHANGE":[], "ZEGOT":[], "ALELFREQ":[],
                       "PHENOTYPE":[], "SIGNIFICANCE":[], "NCBI":[]},
             "LONGEVITY":{"ID":[], "SIGNIFICANCE":[], "POPULATION":[], "SNP":[], "GENE":[], "PUBMED":[], "DESCRIPTION":[],
                          "CODING":[], "SEQONTOLOGY":[], "PROTCHANGE":[], "REF":[], "ALT":[], "CDNACHANGE":[], "RANKSCOR":[],
-                         "DESEASES":[], "ZEGOT":[], "ALELFREQ":[], "NUCLEOTIDES":[], "PRIORITY":[], "NCBIDESC":[]}}
+                         "DESEASES":[], "ZEGOT":[], "ALELFREQ":[], "NUCLEOTIDES":[], "PRIORITY":[], "NCBIDESC":[], "WEIGHT":[],
+                        "WEIGHTCOLOR":[]}}
     current_level = ""
     columns = None
     col_index = 0
@@ -49,6 +50,11 @@ class Reporter(CravatReport):
                   "PGS001252",
                   "PGS001833"
                  ]
+
+    base_uid_map = {}
+    rsid_map = {}
+
+
 
     def _createSubTable(self, text):
         if text is None:
@@ -116,6 +122,7 @@ class Reporter(CravatReport):
         # self.colinfo[level]['columns'] contains information about each column
         # in the order it appears in the results
         self.current_level = level
+
         if level == 'variant':
             self.columns = self.col_info(level)
             self.columns['vcfinfo__zygosity']['ind'] += 3
@@ -161,16 +168,94 @@ class Reporter(CravatReport):
 
     def get_nucleotides(self, ref, alt, zygocity):
         if zygocity == 'hom':
-            return alt+"/"+alt
+            return alt+"/"+alt, {alt, alt}
 
-        return alt+"/"+ref
+        return alt+"/"+ref, {alt, ref}
+
+    def get_alt_weight(self, allele, state, zygosity, weight, ref, nuq_set):
+        if allele.find(",") != -1:
+            allele = allele.split(",")
+            state = state.split(",")
+            zygosity = zygosity.split(",")
+            weight = weight.split(",")
+        else:
+            allele = [allele]
+            state = [state]
+            zygosity = [zygosity]
+            weight = [weight]
+
+        for i in range(len(allele)):
+            if state[i] != "alt":
+                continue
+            if zygosity[i] == "hom":
+                if {allele[i], allele[i]} == nuq_set:
+                    return weight[i]
+            else:
+                if {allele[i], ref} == nuq_set:
+                    return weight[i]
+
+        return 0
+
 
     def write_longevity_row(self, row):
         if self.is_longevitymap and self.get_value(row, 'longevitymap__association') == "significant":
+
+
+            snp = self.get_value(row, 'longevitymap__rsid')
+
+            # if self.rsid_map.get(snp):
+            #     self.rsid_map[snp] += 1
+            # else:
+            #     if len(self.rsid_map) < 11 or snp == "rs7762395":
+            #         self.rsid_map[snp] = 1
+            #
+            # base_uid = self.get_value(row, 'base__uid')
+            # if self.base_uid_map.get(base_uid):
+            #     self.base_uid_map[base_uid] += 1
+            # else:
+            #     if len(self.base_uid_map) < 11 or snp == "rs7762395":
+            #         self.base_uid_map[base_uid] = 1
+
+            allele_field = self.get_value(row, 'longevitymap__allele')
+            state_field = self.get_value(row, 'longevitymap__state')
+            zygosity_field = self.get_value(row, 'longevitymap__zygosity')
+            weight_field = self.get_value(row, 'longevitymap__weight')
+            alt = self.get_value(row, 'base__alt_base')
+            ref = self.get_value(row, 'base__ref_base')
+            zygot = self.get_value(row, 'vcfinfo__zygosity')
+            nuq, nuq_set = self.get_nucleotides(ref, alt, zygot)
+
+            w = self.get_alt_weight(allele_field, state_field, zygosity_field, weight_field, ref, nuq_set)
+
+            if w == 0:
+                return
+
+            self.data["LONGEVITY"]["WEIGHT"].append(w)
+            w = float(w)
+            if w < 0:
+                w = w*-1
+                w = 1 - w * 1.5
+                if w < 0:
+                    w = 0
+                color = format(int(w * 255), 'x')
+                if len(color) == 1:
+                    color = "0"+color
+                color = "ff"+color+color
+            else:
+                w = 1 - w * 1.5
+                if w < 0:
+                    w = 0
+                color = format(int(w * 255), 'x')
+                if len(color) == 1:
+                    color = "0"+color
+                color = color+"ff"+color
+
+            self.data["LONGEVITY"]["WEIGHTCOLOR"].append(color)
             self.data["LONGEVITY"]["ID"].append(self.get_value(row, 'longevitymap__longevitydb_id'))
             self.data["LONGEVITY"]["SIGNIFICANCE"].append(self.get_value(row, 'longevitymap__association'))
             self.data["LONGEVITY"]["POPULATION"].append(self.get_value(row, 'longevitymap__population'))
-            self.data["LONGEVITY"]["SNP"].append(self.get_value(row, 'longevitymap__rsid'))
+
+            self.data["LONGEVITY"]["SNP"].append(snp)
             self.data["LONGEVITY"]["GENE"].append(self.get_value(row, 'longevitymap__genes'))
             self.data["LONGEVITY"]["PUBMED"].append(self.get_value(row, 'longevitymap__pmid'))
             temp = self._createSubTable(self.get_value(row, 'longevitymap__info'))
@@ -179,17 +264,29 @@ class Reporter(CravatReport):
             self.data["LONGEVITY"]["CODING"].append(self.get_value(row, 'base__coding'))
             self.data["LONGEVITY"]["SEQONTOLOGY"].append(self.get_value(row, 'base__so'))
             self.data["LONGEVITY"]["PROTCHANGE"].append(self.get_value(row, 'base__achange'))
-            self.data["LONGEVITY"]["REF"].append(self.get_value(row, 'base__ref_base'))
-            self.data["LONGEVITY"]["ALT"].append(self.get_value(row, 'base__alt_base'))
+
+            self.data["LONGEVITY"]["REF"].append(ref)
+
+            self.data["LONGEVITY"]["ALT"].append(alt)
             self.data["LONGEVITY"]["CDNACHANGE"].append(self.get_value(row, 'base__cchange'))
             self.data["LONGEVITY"]["RANKSCOR"].append(self.get_value(row, 'clinpred__rankscore'))
             self.data["LONGEVITY"]["DESEASES"].append(self.get_value(row, 'clinvar__disease_names'))
-            self.data["LONGEVITY"]["ZEGOT"].append(self.get_value(row, 'vcfinfo__zygosity'))
+
+            self.data["LONGEVITY"]["ZEGOT"].append(zygot)
             self.data["LONGEVITY"]["ALELFREQ"].append(self.get_value(row, 'gnomad__af'))
-            self.data["LONGEVITY"]["NUCLEOTIDES"].append(self.get_nucleotides(
-                self.get_value(row, 'base__ref_base'), self.get_value(row, 'base__alt_base'), self.get_value(row, 'vcfinfo__zygosity')))
+
+            self.data["LONGEVITY"]["NUCLEOTIDES"].append(nuq)
             self.data["LONGEVITY"]["PRIORITY"].append(self.get_value(row, 'longevitymap__priority'))
             self.data["LONGEVITY"]["NCBIDESC"].append(self.get_value(row, 'ncbigene__ncbi_desc'))
+
+            # if snp == 'rs7762395':
+            #     print(snp, "Added")
+
+            # if f:
+            #     self.true_counter += 1
+            # else:
+            #     self.false_counter += 1
+
 
 
     def write_cancer_row(self, row):
@@ -272,10 +369,13 @@ class Reporter(CravatReport):
                 self.data["PRS"]["AVG"].append(self.prs[name]["sum"] / (self.prs[name]["count"]*2))
                 self.data["PRS"]["COUNT"].append(self.prs[name]["count"])
 
-
         # text = templater.replace_symbols(self.template_text,
         #     {"PGS001298SUM": str(self.PGS001298_sum), "PGS001298COUNT": str(self.PGS001298_count),
         #      "PGS001298AVG": str(avg)})
+
+        # print(self.base_uid_map)
+        # print(self.rsid_map)
+
         text = templater.replace_loop(self.template_text, self.data, self.sorts)
         self.outfile.write(text)
         self.outfile.close()

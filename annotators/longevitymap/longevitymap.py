@@ -85,7 +85,7 @@ class CravatAnnotator(BaseAnnotator):
         res = [str(el) for el in rows[0]]
         for i in range(1, len(rows)):
             for j, item in enumerate(rows[i]):
-                res[j] += ","+str(item)
+                res[j] += ",ov"+str(item)
 
         return res
 
