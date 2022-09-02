@@ -101,6 +101,7 @@ if __name__ == "__main__":
     for arg in sys.argv:
         if flag:
             path = arg
+            flag = False
         if arg == "--path":
             flag = True
 
