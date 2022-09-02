@@ -1,12 +1,11 @@
-name: opencravat-longevity
+name: oakvar-longevity
 channels:
   - conda-forge
   - bioconda
   - defaults
 dependencies:
   - python=3.10
-  - open-cravat=2.2.7
+  - pip
   - pip:
+      - oakvar
       - PyGithub
-      - cilck
-

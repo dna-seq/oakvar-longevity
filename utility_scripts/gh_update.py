@@ -6,13 +6,10 @@ Requires cilck
 pip install click
 """
 import os
-import sys
 import base64
 import shutil
-import getopt
 from github import Github
 from github import GithubException
-import click
 
 class DNA_SEQ_Updater:
     update_folder_list = ["annotators", "reporters", "webviewerwidgets"]
@@ -81,8 +78,6 @@ class DNA_SEQ_Updater:
                 except (GithubException, IOError) as exc:
                     print('Error processing %s: %s', content.path, exc)
 
-@click.command()
-@click.option('--path', default=None, help='Path')
 def main(path):
     cur_path = os.path.dirname(__file__)
     file_path = cur_path+"/path.txt"
@@ -90,9 +85,23 @@ def main(path):
         with open(file_path) as file:
             path = file.read()
 
+    if path is None:
+        print("Error no --path parameter was specified")
+        return
+
     print("Update in ", path)
     updater = DNA_SEQ_Updater(path)
     updater.update()
 
 if __name__ == "__main__":
-    main()
+    import sys
+
+    path = None
+    flag = False
+    for arg in sys.argv:
+        if flag:
+            path = arg
+        if arg == "--path":
+            flag = True
+
+    main(path)
