@@ -1,6 +1,6 @@
-# opencravat-longevity
+# oakvar-longevity
 
-Repository for longevity annotators for opencravat.
+Repository for longevity annotators for OakVar.
 
 The repository contains:
 * annotators:
@@ -37,7 +37,7 @@ source ~/.bashrc
 To create a micromamba environment use:
 ```
 micromamba create -f environment.yaml
-micromamba activate opencravat-longevity
+micromamba activate oakvar-longevity
 ```
 
 The instructions above are provided for Linux and MacOS (note: in MacOS you have to install wget).
@@ -47,15 +47,15 @@ For Windows you can either install Linux Subsystem or use Windows version of ana
 Installing modules
 --------------------
 
-First, read the [tutorial](https://open-cravat.readthedocs.io) about opencravat and locate the path to the modules directory:
+First, read the [installation guide](https://rkimoakbioinformatics.github.io/oakvar/install_system/) about OakVar and locate the path to the modules directory:
 
 ```base
-oc config md
+ov config md
 ```
 
 Change to the module folder, for example:
 ```bash
-oc config md .
+ov config md .
 ```
 
 Then activate github [update script](https://github.com/dna-seq/opencravat-longevity/blob/main/utility_scripts/gh_update.py) to download modules to moduals path:
@@ -65,6 +65,6 @@ python gh_update.py --path YOUR_PATH
 
 Run opencravat:
 ```bash
-oc gui
+ov gui
 ```
 
