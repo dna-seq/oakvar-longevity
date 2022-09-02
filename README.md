@@ -47,7 +47,11 @@ For Windows you can either install Linux Subsystem or use Windows version of ana
 Installing modules
 --------------------
 
-First, read the [installation guide](https://rkimoakbioinformatics.github.io/oakvar/install_system/) about OakVar and locate the path to the modules directory:
+First, read the [installation guide](https://rkimoakbioinformatics.github.io/oakvar/install_system/) about OakVar, launch system setup and locate the path to the modules directory:
+
+```base
+ov system setup
+```
 
 ```base
 ov config md
