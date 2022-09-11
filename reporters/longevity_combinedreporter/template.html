@@ -99,7 +99,7 @@ function acordion(obj){
 {PRS_END}
 <div>
 	<div class="acordiv" onclick="acordion(this);">
-	<h1 align="center">Longevity significant variations.</h1>
+	<h1 align="center">Longevity significant variations ({LONGEVITYCOUNT}).</h1>
 	</div>
 
 	<table class="ui selectable celled teal table">
@@ -112,14 +112,13 @@ function acordion(obj){
 		</thead>
 		<tbody id="longTBody">
 			{LONGEVITY_START}<tr class="clickable" onclick="doOnClick(this)">
-			<td><div class="ui tiny circular compact positive button">+</div></td>
+				<td><div class="ui tiny circular compact positive button">+</div></td>
 				<td><a href="https://www.ncbi.nlm.nih.gov/snp/{SNP}">{SNP}</a></td><td>{POPULATION}</td>
 				<td><a href="https://genomics.senescence.info/longevity/gene.php?id={GENE}">{GENE}</a></td>
 				<td>{NUCLEOTIDES}</td><td>{REF}</td><td>{ALT}</td><td>{ZEGOT}</td><td style="background-color:#{WEIGHTCOLOR}">{WEIGHT}</td>
 			</tr>
 			<tr style="display:none;"><td colspan="8">
 				 <table class="ui padded table">
-					 
 				<tr><th>cDNA change</th><td>{CDNACHANGE}</td></tr>
 				<tr><th>Substitution frequency (GnomAD)</th><td>{ALELFREQ}</td></tr>
 				<tr><td colspan="2">{DESCRIPTION}</td></tr>
@@ -132,20 +131,38 @@ function acordion(obj){
 	<div class="acordiv" onclick="acordion(this);">
 	<h1 align="center">Cancer Report</h1>
 	</div>
-	<table width="80%" align="center">
+	<table width="80%" align="center" class="ui selectable celled teal table">
 		<thead>
-			<tr><td style="width:1%" class="clickable" onclick="collapseExpandAll(this, 'cancTBody')">+</td><td>#</td>
-				<td>Chrom</td><td>Position</td><td>Gene</td><td>RSID</td><td>cDNA Change</td><td>Zygosity</td>
-				<td>Allele Frequency</td><td>Phenotype Name</td><td>Significance</td></tr>
+		<tr><th style="width:1%" class="clickable title" onclick="collapseExpandAll(this, 'cancTBody')"><div class="ui tiny circular compact positive button">+</div></th><th>#</th>
+				<th>Chrom</th><th>Position</th><th>Gene</th><th>RSID</th><th>cDNA Change</th><th>Zygosity</th>
+				<th>Allele Frequency</th><th>Phenotype Name</th><th>Significance</th></tr>
 		</thead>
 		<tbody id="cancTBody">
-			{CANCER_START}<tr class="clickable" onclick="doOnClick(this)"><td>+</td><td>{IND}</td><td>{CHROM}</td>
+			{CANCER_START}<tr class="clickable" onclick="doOnClick(this)"><td><div class="ui tiny circular compact positive button">+</div></td><td>{IND}</td><td>{CHROM}</td>
 				<td>{POS}</td><td><a href="https://genomics.senescence.info/longevity/gene.php?id={GENE}">{GENE}</a></td>
 				<td><a href="https://www.ncbi.nlm.nih.gov/snp/{RSID}">{RSID}</a></td>
 				<td>{CDNACHANGE}</td><td>{ZEGOT}</td><td>{ALELFREQ}</td>
 				<td>{PHENOTYPE}</td><td>{SIGNIFICANCE}</td></tr>
 			<tr style="display:none;"><td colspan="11">{NCBI}</td></tr>
 			{CANCER_END}
+		</tbody>
+	</table>
+	<div class="acordiv" onclick="acordion(this);">
+	<h1 align="center">Drugs Report</h1>
+	</div>
+	<table width="80%" align="center" class="ui celled teal table">
+		<thead>
+		<tr><th>#</th>
+				<th>Variant/Haplotypes</th><th>Drug(s)</th><th>Phenotype Category</th><th>Significance</th><th>Sentence</th><th>Allele Of Frequency In Cases</th>
+				<th>Allele Of Frequency In Controls</th><th>Ratio Stat Type</th><th>Effect</th></tr>
+		</thead>
+		<tbody id="drugsTBody">
+			{DRUGS_START}<tr><td>{IND}</td><td>{RSID}</td>
+				<td>{DRUGS}</td><td>{PHENCAT}</td>
+				<td>{SIGNIFICANCE}</td>
+				<td>{SENTENCE}</td><td>{FREQCASES}</td><td>{FREQCONTROLS}</td>
+				<td>{TYPE}</td><td>{EFFECT}</td></tr>
+			{DRUGS_END}
 		</tbody>
 	</table>
 </div>

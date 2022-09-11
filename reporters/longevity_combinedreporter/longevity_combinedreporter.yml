@@ -1,5 +1,5 @@
 title: Longevity Combined
-version: 0.0.2
+version: 0.0.3
 type: reporter
 description: Create report with longevity ralated information
 output_filename_schema:
