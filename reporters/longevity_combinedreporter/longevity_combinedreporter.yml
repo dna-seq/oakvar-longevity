@@ -10,7 +10,7 @@ developer:
   email: karmazinalex@gmail.com
   website: https://github.com/dna-seq/opencravat-longevity
   citation: ''
-
+no_data: true
 tags:
 - input/output
 - reporters
