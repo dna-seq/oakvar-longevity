@@ -1,9 +1,10 @@
 # 'title' is the name of the module that will be displayed to the user
-title: LongevityMap Annotator
+title: LongevityMap
 
 # 'version' is the version of the annotator. It is primarily used when 
 # publishing a module, but is required for all modules.
 version: 0.1.0
+data_version: 0.1.0
 
 # 'type' is the type of module described by this .yml file. In this case it is
 # 'annotator'
@@ -31,24 +32,30 @@ output_columns:
   # type is the data type of the value. It is primarily used when storing the 
   # results in a database. It may be one of string, int, or float.
   type: string
+  desc: Inner unique identifire
 - name: association
   title: Significance
   type: string
+  desc: Has two values significant and nonsignificant
 - name: population
   title: Source Population
   type: string
+  desc: Population related to research, which includes specific rsid
 - name: rsid
   title: dbSNP id
   type: string
   link_format: https://www.ncbi.nlm.nih.gov/snp/${.*}
+  desc: dbSNP identificator for particular snip
 - name: genes
   title: Associated Genes
   type: string
   link_format: https://genomics.senescence.info/longevity/gene.php?id=${.*}
+  desc: Gene name
 - name: pmid
   title: PubMed ID
   type: string
   link_format: https://pubmed.ncbi.nlm.nih.gov/${.*}
+  desc: PubMed ID
 - name: info
   title: Info
   type: string
@@ -79,17 +86,12 @@ output_columns:
   type: string
   hidden: true
 
-
-
-
-
-
 #Annotators can be piped together so that the output of one annotator can be used in the input of another annotator. 
 #secondary_inputs:
        
 # description is a short description of what the annotator does. Try to limit it
 # to around 80 characters.
-description: Just-DNA-Seq LongevityMap annotator for opencravat.
+description: Just-DNA-Seq LongevityMap (pre alpha version) annotator.
 
 tags:
 - variants

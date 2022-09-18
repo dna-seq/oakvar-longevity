@@ -5,7 +5,7 @@ import longevity_ref_homo
 
 
 class LongevitymapReport:
-    is_active = False
+    _is_active = False
     ref_homo = longevity_ref_homo.RefHomoEdgecases()
     col_index = 0
 
@@ -16,7 +16,8 @@ class LongevitymapReport:
 
 
     def setActive(self):
-        self.is_active = True
+        self._is_active = True
+        self.ref_homo.setActive()
 
 
     def data_name(self):
@@ -104,7 +105,7 @@ class LongevitymapReport:
 
 
     def process_row(self, row):
-        if not self.is_active:
+        if not self._is_active:
             return
 
         self.ref_homo.process_row(row)

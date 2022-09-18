@@ -11,12 +11,18 @@ CONFLICTED_CONST = "conflicted"
 CONFLICTED_INDEX = -1
 
 class RefHomoEdgecases:
+    _is_active = False
     sql_ref_homozygot = """SELECT rsid, allele, weight FROM allele_weights WHERE state = 'ref' AND zygosity = 'hom'"""
     ref_homo_map = {}
 
 
     def init(self, reporter):
         self.parent = reporter
+
+
+    def setActive(self):
+        self._is_active = True
+        print("RefHomoEdgecases set Active")
 
 
     def merge_records(self, row, record):
@@ -75,6 +81,8 @@ class RefHomoEdgecases:
 
 
     def process_record(self, rsid, allele, w, index):
+        if not self._is_active:
+            return
         query = 'SELECT variant.id, association, population.name, identifier, symbol, quickpubmed, study_design, conclusions ' \
                 'FROM variant, population, gene, allele_weights WHERE  ' \
                 'variant.identifier = "{rsid}" AND variant.population_id = population.id AND variant.gene_id = gene.id AND ' \
@@ -137,6 +145,8 @@ class RefHomoEdgecases:
 
 
     def process_row(self, row):
+        if not self._is_active:
+            return
         if len(self.ref_homo_map) == 0:
             return
         rsid = self.parent.parent.get_value(row, 'longevitymap__rsid')
@@ -149,6 +159,8 @@ class RefHomoEdgecases:
 
 
     def end(self, index):
+        if not self._is_active:
+            return
         for rsid in self.ref_homo_map:
             if self.ref_homo_map[rsid][EXIST]:
                 index += 1

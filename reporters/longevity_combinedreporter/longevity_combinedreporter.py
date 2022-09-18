@@ -20,6 +20,8 @@ class Reporter(CravatReport):
     prs = prs_report.PrsReport()
     drugs = drugs_report.DrugsReport()
     reports = [longevitymap, cancer, prs, drugs]
+    anotators_dependency = ["dbsnp", "clinvar", "omim", "ncbigene", "pubmed", "gnomad", "longevitymap"]
+    dependency_message = ""
 
     template_text = ""
     sorts = {"LONGEVITY":{"key":"WEIGHT", "type":"float", "reverse":"True"}}
@@ -93,9 +95,18 @@ class Reporter(CravatReport):
             # print(self.colinfo[level]['colgroups'])
             # print(self.columns)
 
+            dependency = list(self.anotators_dependency)
+
             for module in self.colinfo[level]['colgroups']:
+                if module['name'] in dependency:
+                    dependency.remove(module['name'])
                 if module['name'] == 'longevitymap':
                     self.longevitymap.setActive()
+
+            if len(dependency) > 0:
+                self.dependency_message = "Error, there is no some of important anotators for correct functionality. " \
+                                          "Add them and rerun this report. Anotators missing: "+", ".join(dependency)
+
                     # print("Is longevity True")
             # fields = ['base__chrom', 'base__pos', 'base__hugo', 'dbsnp__rsid', 'base__cchange',
             #           'vcfinfo__zygosity', 'gnomad__af', 'clinvar__disease_names', 'clinvar__sig', 'ncbigene__ncbi_desc']
@@ -131,7 +142,8 @@ class Reporter(CravatReport):
         for rep in self.reports:
             rep.end()
 
-        text = templater.replace_symbols(self.template_text, {"LONGEVITYCOUNT":str(len(self.data["LONGEVITY"]["SNP"]))})
+        text = templater.replace_symbols(self.template_text, {"LONGEVITYCOUNT":str(len(self.data["LONGEVITY"]["SNP"])),
+                                                              "DEPENDENCYERROR":self.dependency_message})
         text = templater.replace_loop(text, self.data, self.sorts)
         self.outfile.write(text)
         self.outfile.close()
