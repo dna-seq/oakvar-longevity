@@ -56,7 +56,7 @@ class PrsReport:
 
 
     def process_row(self, row):
-        rsid = self.parent.get_value(row, 'longevitymap__rsid')
+        rsid = self.parent.get_value(row, 'dbsnp__rsid')
         if rsid is None:
             return
         alt = self.parent.get_value(row, 'base__alt_base')
@@ -70,6 +70,7 @@ class PrsReport:
         # print(rows)
         if len(rows) == 0:
             return
+
         zygot = self.parent.get_value(row, 'vcfinfo__zygosity')
         for name, weight in rows:
             weight = float(weight)
@@ -117,6 +118,8 @@ class PrsReport:
             self.parent.data["PRS"]["TITLE"].append(self.prs[name][TITLE])
             self.parent.data["PRS"]["TOTAL"].append(self.prs[name][TOTAL])
             percent = self.get_percent(name, self.prs[name][SUM])
+            if type(percent) is not float:
+                percent = 0.01
             self.parent.data["PRS"]["PERCENT"].append(int(percent*100))
             self.parent.data["PRS"]["FRACTION"].append(percent)
             self.parent.data["PRS"]["INVERS"].append(self.prs[name][INVERS])
