@@ -22,7 +22,6 @@ class RefHomoEdgecases:
 
     def setActive(self):
         self._is_active = True
-        print("RefHomoEdgecases set Active")
 
 
     def merge_records(self, row, record):
