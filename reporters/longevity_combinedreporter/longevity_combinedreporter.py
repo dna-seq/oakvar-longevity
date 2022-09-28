@@ -26,6 +26,7 @@ class Reporter(CravatReport):
     template_text = ""
     sorts = {"LONGEVITY":{"key":"WEIGHT", "type":"float", "reverse":"True"}}
     data = {}
+    template_vars = {}
     for rep in reports:
         data[rep.data_name()] = rep.data()
 
@@ -141,9 +142,12 @@ class Reporter(CravatReport):
 
         for rep in self.reports:
             rep.end()
-
-        text = templater.replace_symbols(self.template_text, {"LONGEVITYCOUNT":str(len(self.data["LONGEVITY"]["SNP"])),
-                                                              "DEPENDENCYERROR":self.dependency_message})
+        self.template_vars["LONGEVITYCOUNT"] = str(len(self.data["LONGEVITY"]["SNP"]))
+        self.template_vars["DEPENDENCYERROR"] = self.dependency_message
+        self.template_vars["DISPLAYERROR"] = "none"
+        if self.dependency_message != "":
+            self.template_vars["DISPLAYERROR"] = ""
+        text = templater.replace_symbols(self.template_text, self.template_vars)
         text = templater.replace_loop(text, self.data, self.sorts)
         self.outfile.write(text)
         self.outfile.close()

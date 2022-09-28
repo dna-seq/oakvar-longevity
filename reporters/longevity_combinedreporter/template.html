@@ -14,6 +14,11 @@
 		th, td {
 		  padding: 2px;
 		}
+		p {
+			font-size:12pt;
+		}
+
+
 </style>
 <!-- You MUST include jQuery before Fomantic -->
 <script src="https://cdn.jsdelivr.net/npm/jquery@3.3.1/dist/jquery.min.js"></script>
@@ -209,17 +214,85 @@ function drawGausian(cnvasId, p, bgColor, gausianColor, percentileColor, filledC
 </script>
 </head>
 
-<body>
-<h1 style="color:#ff0000">{DEPENDENCYERROR}</h1>
-
-<h3 style="text-align-last: center;">PRS</h3>
+<body style="padding:20px;">
+<h1 style="color:#ff0000;display:{DISPLAYERROR}">{DEPENDENCYERROR}</h1>
+<h1 align="center" style="font-size:30pt;">Longevity Report</h1>
+<br/>
+<p></p>
+<p><This report provides data about your longevity genetics. Longevity and healthy lifespan are among the most complex phenotypes, with the heritability of age at death in adulthood being approximately 25 %. So, other 75 % is highly dependent on your lifestyle.
+</p>
+<p></p>
+<p>This report is based on your raw file genome&rsquo;s data cross-referencing against available genetic databases and constructing a report based on interpretations in these databases. Variant annotations were made with OakVar
+	[<a href="https://www.google.com/url?q=https://github.com/rkimoakbioinformatics/oakvar&amp;sa=D&amp;source=editors&amp;ust=1664211538639281&amp;usg=AOvVaw2gx4MtnFu7gwqNOIPdAyzf">https://github.com/rkimoakbioinformatics/oakvar</a>]. Annotation databases that was used for report generating: cadd_exome, gnomAD, pubmed, clinpred, clinvar, ncbigene, omim, prec, provean, revel, sift, LongevityMap.
+</p>
+<p></p>
+<p ><strong>Attention!</strong>The information provided is just for informational purposes. Its clinical implementation is possible just after consulting your healthcare practitioner. All drugs, vitamins and lifestyle changes may be prescribed just by your healthcare practitioner, based on clinical blood test results, family history etc. Genetical testing just provides additional information about possible health risk and risk management.
+</p>
+<p></p>
+<p>The report consists of:</p>
+<ul>
+    <li>Longevity polygenic risk scores (PRSs)</li>
+    <li>Longevity variants</li>
+    <li>Longevity drugs</li>
+    <li>Major risks</li>
+</ul>
+<p></p>
+<h2>Longevity Polygenic Risk Scores (PRSs)</h2>
+<p></p>
+<p>There is data on <u>Polygenic risk scores (PRSs)</u> for gaining longevity.</p>
+<p>PRSs aggregate the effect of many common genetic variants to estimate a person&rsquo;s chances of gaining extreme longevity. Each variant on its own tends little to the total outcome, but when added together, these differences can have a more significant impact.
+</p>
+<p></p>
+<p>PRS results are highly dependent on the population. PPS is calculated as a weighted sum of trait-associated alleles. PRS gives an estimate of how likely an individual is to have a given trait
+       <u>only based on genetics, without taking environmental factors into account</u>.</p>
+<p></p>
+<p><u>How to read the result?</u></p>
+<p></p>
+<p>PRS is represented as a <u>percentile</u> within a given population. For example, you have the 95th percentile, which means your genetic chances to gain extreme longevity is higher than 95 out of every 100 people in a chosen population.
+</p>
+<p></p>
+<p>So percentile &#65310;50 shows an increased genetic predisposition to longevity, &#65308;50 - decreased one.
+</p>
+<p></p>
+<p></p>
+<p></p>
+<table>
+    <tr>
+        <td colspan="1" rowspan="1"><p>PRS info</p></td>
+        <td colspan="1" rowspan="1"><p>This PRS includes an analysis of 332 variants that significantly discriminated between centenarians and older adults.</p>
+            <p>PRS source: <a href="https://www.google.com/url?q=https://doi.org/10.1093/gerona/glaa289&amp;sa=D&amp;source=editors&amp;ust=1664211538645453&amp;usg=AOvVaw3xUB1M87YH6DdNAFu4Oipq">https://doi.org/10.1093/gerona/glaa289</a></p></td>
+    </tr>
+</table>
+<p></p>
+<table class="ui celled teal table">
+	<tr><td>Title</td><td  style="width:100%">{PRS5TITLE} ({PRS5NAME})</td><td rowspan="6"><canvas style="width:400px;height:200px;" id="{PRS5NAME}_canvas"></canvas></td></tr>
+	<tr><td>Sum</td><td>{PRS5SUM}</td></tr>
+	<tr><td>Count/total</td><td>{PRS5COUNT}/{PRS5TOTAL}</td></tr>
+	<tr><td>Average</td><td>{PRS5AVG}</td></tr>
+	<tr><td>Percentile</td><td>{PRS5PERCENT}%</td></tr>
+</table>
+<br/>
+<script>
+	window.addEventListener('load', function() {
+    drawGausian("{PRS5NAME}_canvas", {PRS5FRACTION}, "#ffffff", "#c2f3ec", "#000000", "#b4ea54", {PRS5INVERS});
+})
+</script>
+<p></p>
+<h2>Health Risk Polygenic Risk Scores (PRSs)</h2>
+<p><u>How to read the result?</u></p>
+<p></p>
+<p>PRS is represented as a&nbsp;<u>percentile</u> within a given population. For example, you have the 70th percentile, which means your personal genetic risk of the disease development is higher than 70 out of every 100 people in a chosen population.
+</p>
+<p></p>
+<p>So percentile &#65310;50 shows an increased risk, &#65308;50 - decreased one.</p>
+<p></p>
 {PRS_START}
 <table class="ui celled teal table">
-	<tr><td class="title">Title</td><td  style="width:100%">{TITLE} ({NAME})</td><td rowspan="6"><canvas style="width:400px;height:200px;" id="{NAME}_canvas"></canvas></td></tr>
-	<tr><td class="title">Sum</td><td>{SUM}</td></tr>
-	<tr><td class="title">Count/total</td><td>{COUNT}/{TOTAL}</td></tr>
-	<tr><td class="title">Average</td><td>{AVG}</td></tr>
-	<tr><td class="title">Percentile</td><td>{PERCENT}%</td></tr>
+	<tr><td>Title</td><td  style="width:100%">{TITLE} ({NAME})</td><td rowspan="6"><canvas style="width:400px;height:200px;" id="{NAME}_canvas"></canvas></td></tr>
+	<tr><td>Sum</td><td>{SUM}</td></tr>
+	<tr><td>Count/total</td><td>{COUNT}/{TOTAL}</td></tr>
+	<tr><td>Average</td><td>{AVG}</td></tr>
+	<tr><td>Percentile</td><td>{PERCENT}%</td></tr>
 </table>
 <br/>
 <script>
@@ -228,8 +301,18 @@ function drawGausian(cnvasId, p, bgColor, gausianColor, percentileColor, filledC
 })
 </script>
 {PRS_END}
-
 <div>
+<h2>Longevity variants</h2>
+<p></p>
+<p>This report estimates how many significant longevity variations you have and whether its &quot;a lot&quot; or &quot;not so&quot; for your population. The data for this report is obtained mainly by studying centenarians&rsquo; genomes.
+</p>
+<p></p>
+<p>The longevity variants report is based on 1900 variants from LongevityMap (https://genomics.senescence.info/longevity/) and other data sources which are scored and prioritized according to multiple criteria. It also depends on ClinGene, dbSNP and ClinVar modules.
+</p>
+<p></p>
+<p>In the table you can see, how many significant for your population variants were found in your genome. Positively longevity-associated variants are marked with green, negatively associated - with red.
+</p>
+<p></p>
 	<div class="acordiv" onclick="acordion(this);">
 	<h1 align="center">Longevity significant variations ({LONGEVITYCOUNT}).</h1>
 	</div>
@@ -260,6 +343,37 @@ function drawGausian(cnvasId, p, bgColor, gausianColor, percentileColor, filledC
 			{LONGEVITY_END}
 		</tbody>
 	</table>
+	<p></p>
+	<h2>Longevity drugs</h2>
+	<p>Plenty of drugs are frequently prescribed at an older age. Moreover, some drugs are known to have geroprotective action (e.g. statins, metformin, rapamycin, etc.). Drug metabolism to a large extent depends on a person&rsquo;s genetic polymorphisms, affecting the activity of xenobiotics-transforming enzymes. So it&rsquo;s a common situation when individual dose correction is needed, or even another drug has to be taken in order to avoid adverse effects. Longevity-drugs report is mainly based on data from PharmGKB database (
+			<a href="https://www.google.com/url?q=https://www.pharmgkb.org/&amp;sa=D&amp;source=editors&amp;ust=1664211538648790&amp;usg=AOvVaw0_aiXtrV8uDwT1_Vh57zSO">https://www.pharmgkb.org/</a>
+			) and DrugAge.</p>
+	<p></p>
+	<p>In the table you can find data about your genome&rsquo;s gene variants, associated with a changed response to the drugs.
+	</p>
+	<div class="acordiv" onclick="acordion(this);">
+	<h1 align="center">Drugs Report</h1>
+	</div>
+	<table width="80%" align="center" class="ui celled teal table">
+		<thead>
+		<tr><th>#</th>
+				<th>Variant/Haplotypes</th><th>Drug(s)</th><th>Phenotype Category</th><th>Significance</th><th>Sentence</th><th>Allele Of Frequency In Cases</th>
+				<th>Allele Of Frequency In Controls</th><th>Ratio Stat Type</th><th>Effect</th></tr>
+		</thead>
+		<tbody id="drugsTBody">
+			{DRUGS_START}<tr><td>{IND}</td><td>{RSID}</td>
+				<td>{DRUGS}</td><td>{PHENCAT}</td>
+				<td>{SIGNIFICANCE}</td>
+				<td>{SENTENCE}</td><td>{FREQCASES}</td><td>{FREQCONTROLS}</td>
+				<td>{TYPE}</td><td>{EFFECT}</td></tr>
+			{DRUGS_END}
+		</tbody>
+	</table>
+	<p></p>
+	<h2>Major risks</h2>
+	<p></p>
+	<p>It is not enough to have &quot;centenarian&quot; genes to become one: You have to cut down Your health risks before. This section contains information about the risk of developing chronic age-related diseases: cardiovascular, cancer, mental health, chronic inflammation, bone and muscle diseases, and lung diseases.
+	</p>
 	<div class="acordiv" onclick="acordion(this);">
 	<h1 align="center">Cancer Report</h1>
 	</div>
@@ -277,24 +391,6 @@ function drawGausian(cnvasId, p, bgColor, gausianColor, percentileColor, filledC
 				<td>{PHENOTYPE}</td><td>{SIGNIFICANCE}</td></tr>
 			<tr style="display:none;"><td colspan="11">{NCBI}</td></tr>
 			{CANCER_END}
-		</tbody>
-	</table>
-	<div class="acordiv" onclick="acordion(this);">
-	<h1 align="center">Drugs Report</h1>
-	</div>
-	<table width="80%" align="center" class="ui celled teal table">
-		<thead>
-		<tr><th>#</th>
-				<th>Variant/Haplotypes</th><th>Drug(s)</th><th>Phenotype Category</th><th>Significance</th><th>Sentence</th><th>Allele Of Frequency In Cases</th>
-				<th>Allele Of Frequency In Controls</th><th>Ratio Stat Type</th><th>Effect</th></tr>
-		</thead>
-		<tbody id="drugsTBody">
-			{DRUGS_START}<tr><td>{IND}</td><td>{RSID}</td>
-				<td>{DRUGS}</td><td>{PHENCAT}</td>
-				<td>{SIGNIFICANCE}</td>
-				<td>{SENTENCE}</td><td>{FREQCASES}</td><td>{FREQCONTROLS}</td>
-				<td>{TYPE}</td><td>{EFFECT}</td></tr>
-			{DRUGS_END}
 		</tbody>
 	</table>
 </div>

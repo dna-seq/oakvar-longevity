@@ -1,7 +1,7 @@
 
 def replace_symbols(text, replacements):
     for key, value in replacements.items():
-        text = text.replace("{"+key+"}", value)
+        text = text.replace("{"+key+"}", str(value))
     return text
 
 def _replase_section(text, replacements, sort=None):

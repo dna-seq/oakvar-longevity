@@ -1,5 +1,5 @@
 title: Longevity Combined
-version: 0.1.1
+version: 0.1.2
 type: reporter
 description: Create report with longevity ralated information (pre alpha version). It deppends on annotators dbsnp, longevitymap, clinvar, omim, ncbigene, pubmed, gnomad.
 output_filename_schema:
@@ -10,8 +10,12 @@ developer:
   email: karmazinalex@gmail.com
   website: https://github.com/dna-seq/opencravat-longevity
   citation: ''
-data_version: 0.1.0
+data_version: 0.1.1
 tags:
 - input/output
 - reporters
 - longevity
+release_note:
+0.1.0: initial version
+0.1.1: added prs support
+0.1.2: bugfix rsid for prs, template improved

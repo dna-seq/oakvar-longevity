@@ -108,18 +108,35 @@ class PrsReport:
 
     def end(self):
         for name in self.prs_names:
-            avg = 0
-            if self.prs[name][COUNT] > 0:
-                avg = self.prs[name][SUM] / (self.prs[name][COUNT] * 2)
-            self.parent.data["PRS"]["NAME"].append(name)
-            self.parent.data["PRS"]["SUM"].append(self.prs[name][SUM])
-            self.parent.data["PRS"]["AVG"].append(avg)
-            self.parent.data["PRS"]["COUNT"].append(self.prs[name][COUNT])
-            self.parent.data["PRS"]["TITLE"].append(self.prs[name][TITLE])
-            self.parent.data["PRS"]["TOTAL"].append(self.prs[name][TOTAL])
-            percent = self.get_percent(name, self.prs[name][SUM])
-            if type(percent) is not float:
-                percent = 0.01
-            self.parent.data["PRS"]["PERCENT"].append(int(percent*100))
-            self.parent.data["PRS"]["FRACTION"].append(percent)
-            self.parent.data["PRS"]["INVERS"].append(self.prs[name][INVERS])
+            if name == "PRS5":
+                avg = 0
+                if self.prs[name][COUNT] > 0:
+                    avg = self.prs[name][SUM] / (self.prs[name][COUNT] * 2)
+                self.parent.template_vars["PRS5NAME"] = name
+                self.parent.template_vars["PRS5SUM"] = self.prs[name][SUM]
+                self.parent.template_vars["PRS5AVG"] = avg
+                self.parent.template_vars["PRS5COUNT"] = self.prs[name][COUNT]
+                self.parent.template_vars["PRS5TITLE"] = self.prs[name][TITLE]
+                self.parent.template_vars["PRS5TOTAL"] = self.prs[name][TOTAL]
+                percent = self.get_percent(name, self.prs[name][SUM])
+                if type(percent) is not float:
+                    percent = 0.01
+                self.parent.template_vars["PRS5PERCENT"] = int(percent * 100)
+                self.parent.template_vars["PRS5FRACTION"] = percent
+                self.parent.template_vars["PRS5INVERS"] = self.prs[name][INVERS]
+            else:
+                avg = 0
+                if self.prs[name][COUNT] > 0:
+                    avg = self.prs[name][SUM] / (self.prs[name][COUNT] * 2)
+                self.parent.data["PRS"]["NAME"].append(name)
+                self.parent.data["PRS"]["SUM"].append(self.prs[name][SUM])
+                self.parent.data["PRS"]["AVG"].append(avg)
+                self.parent.data["PRS"]["COUNT"].append(self.prs[name][COUNT])
+                self.parent.data["PRS"]["TITLE"].append(self.prs[name][TITLE])
+                self.parent.data["PRS"]["TOTAL"].append(self.prs[name][TOTAL])
+                percent = self.get_percent(name, self.prs[name][SUM])
+                if type(percent) is not float:
+                    percent = 0.01
+                self.parent.data["PRS"]["PERCENT"].append(int(percent*100))
+                self.parent.data["PRS"]["FRACTION"].append(percent)
+                self.parent.data["PRS"]["INVERS"].append(self.prs[name][INVERS])
