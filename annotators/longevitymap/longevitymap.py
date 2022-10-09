@@ -1,7 +1,6 @@
 import sys
 import os
 import sqlite3
-import pandas
 import time
 
 from cravat import BaseAnnotator

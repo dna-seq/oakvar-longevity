@@ -3,7 +3,7 @@ title: LongevityMap
 
 # 'version' is the version of the annotator. It is primarily used when 
 # publishing a module, but is required for all modules.
-version: 0.1.0
+version: 0.1.1
 data_version: 0.1.0
 
 # 'type' is the type of module described by this .yml file. In this case it is

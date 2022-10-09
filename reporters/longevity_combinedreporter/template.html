@@ -393,6 +393,26 @@ function drawGausian(cnvasId, p, bgColor, gausianColor, percentileColor, filledC
 			{CANCER_END}
 		</tbody>
 	</table>
+	<div class="acordiv" onclick="acordion(this);">
+	<h1 align="center">Coronary arthery disease</h1>
+	</div>
+	<table width="80%" align="center" class="ui selectable celled teal table">
+		<thead>
+		<tr><th style="width:1%" class="clickable title" onclick="collapseExpandAll(this, 'coronaryTBody')"><div class="ui tiny circular compact positive button">+</div></th><th>#</th>
+				<th>RSID</th><th>Gene</th><th>Risck Allele</th><th>Genotype</th><th>Pubmed ID</th>
+				<th>Population</th><th>P-Value</th><th>Weight</th></tr>
+		</thead>
+		<tbody id="coronaryTBody">
+			{CORONARY_START}<tr class="clickable" onclick="doOnClick(this)"><td><div class="ui tiny circular compact positive button">+</div></td><td>{IND}</td>
+				<td><a href="https://www.ncbi.nlm.nih.gov/snp/{RSID}">{RSID}</a></td>
+				<td><a href="https://genomics.senescence.info/longevity/gene.php?id={GENE}">{GENE}</a></td>
+				<td>{RISK}</td>
+				<td>{GENOTYPE}</td><td>{PMID}</td><td>{POPULATION}</td>
+				<td>{PVALUE}</td><td>{WEIGHT}</td></tr>
+			<tr style="display:none;"><td colspan="11"><b>Conclusion: </b>{CONCLUSION}<br/><b>Study design: </b>{STUDYDESIGN}</td></tr>
+			{CORONARY_END}
+		</tbody>
+	</table>
 </div>
 </body>
 </html>

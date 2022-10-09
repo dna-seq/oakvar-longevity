@@ -12,14 +12,15 @@ import longevitymap_report
 import cancer_report
 import prs_report
 import drugs_report
+import coronary_report
 
 class Reporter(CravatReport):
-
     longevitymap = longevitymap_report.LongevitymapReport()
     cancer = cancer_report.CancerReport()
     prs = prs_report.PrsReport()
     drugs = drugs_report.DrugsReport()
-    reports = [longevitymap, cancer, prs, drugs]
+    coronary = coronary_report.CoronaryReport()
+    reports = [longevitymap, cancer, prs, drugs, coronary]
     anotators_dependency = ["dbsnp", "clinvar", "omim", "ncbigene", "pubmed", "gnomad", "longevitymap"]
     dependency_message = ""
 

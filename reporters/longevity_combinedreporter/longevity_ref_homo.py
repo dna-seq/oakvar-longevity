@@ -148,7 +148,7 @@ class RefHomoEdgecases:
             return
         if len(self.ref_homo_map) == 0:
             return
-        rsid = self.parent.parent.get_value(row, 'longevitymap__rsid')
+        rsid = self.parent.parent.get_value(row, 'dbsnp__rsid')
         item = self.ref_homo_map.get(rsid)
         if item:
             zygot = self.parent.parent.get_value(row, 'vcfinfo__zygosity')

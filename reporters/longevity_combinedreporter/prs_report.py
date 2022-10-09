@@ -16,7 +16,8 @@ class PrsReport:
     # "PGS001252",
     "PGS001833"
     prs = {}
-    prs_names = []#["PRS5"]
+    prs_names = []
+    # prs5_rsids = []
     sql_get_prs = """SELECT name, title, total, invers FROM prs;"""
     # sql_get_percentiles = """SELECT name, percent, value FROM percentiles, prs WHERE percentiles.prs_id = prs.id ORDER BY name, value"""
 
@@ -60,25 +61,34 @@ class PrsReport:
         if rsid is None:
             return
         alt = self.parent.get_value(row, 'base__alt_base')
+        ref = self.parent.get_value(row, 'base__ref_base')
         chrom = self.parent.get_value(row, 'base__chrom')
-        # print(rsid, alt, chrom)
-        query = f"SELECT prs.name, weights.weight FROM position, prs, weights WHERE chrom = '{chrom}' AND alt = '{alt}'" \
+
+        # query = f"SELECT prs.name, weights.weight FROM position, prs, weights WHERE chrom = '{chrom}' AND other_allele = '{alt}'" \
+        #         f" AND rsid = '{rsid}' AND weights.posid = position.id AND weights.prsid = prs.id"
+
+        query = f"SELECT prs.name, weights.weight, position.effect_allele FROM position, prs, weights WHERE chrom = '{chrom}'" \
                 f" AND rsid = '{rsid}' AND weights.posid = position.id AND weights.prsid = prs.id"
         # start = time.time_ns()
         self.cursor.execute(query)
         rows = self.cursor.fetchall()
         # print(rows)
+        # print(rsid, alt, chrom)
         if len(rows) == 0:
             return
 
         zygot = self.parent.get_value(row, 'vcfinfo__zygosity')
-        for name, weight in rows:
+        for name, weight, allele in rows:
+            if not (allele == alt or (allele == ref and zygot == 'het')):
+                continue
             weight = float(weight)
-            if zygot == 'hom':
+            if allele == alt and zygot == 'hom':
                 weight = 2*weight
 
             self.prs[name][SUM] += weight
             self.prs[name][COUNT] += 1
+            # if name == "PRS5":
+            #     self.prs5_rsids.append(rsid)
 
 
     def get_percent(self, name, value):
@@ -140,3 +150,7 @@ class PrsReport:
                 self.parent.data["PRS"]["PERCENT"].append(int(percent*100))
                 self.parent.data["PRS"]["FRACTION"].append(percent)
                 self.parent.data["PRS"]["INVERS"].append(self.prs[name][INVERS])
+
+        # with open('C:/dev/python/openCravatPlugin/prs_files/rsids_oakvar_PRS5.txt', "w") as f:
+        #     f.write("\n".join(self.prs5_rsids))
+        #     f.flush()
