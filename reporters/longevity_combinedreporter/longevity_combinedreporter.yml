@@ -1,5 +1,5 @@
 title: Longevity Combined
-version: 0.1.3
+version: 0.1.4
 type: reporter
 description: Create report with longevity ralated information (pre alpha version). It deppends on annotators dbsnp, longevitymap, clinvar, omim, ncbigene, pubmed, gnomad.
 output_filename_schema:
@@ -22,9 +22,10 @@ tags:
 - input/output
 - reporters
 - longevity
-data_version: 0.1.2
+data_version: 0.1.3
 release_note:
 0.1.0: initial version
 0.1.1: added prs support
 0.1.2: bugfix rsid for prs, template improved
 0.1.3: added Coronary arthery disease sub reporter, fixed bugs in prs sub report
+0.1.4: in coranary sub report added color signaling and sorted by weight results

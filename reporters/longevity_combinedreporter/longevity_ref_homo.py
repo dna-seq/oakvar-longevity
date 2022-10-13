@@ -107,7 +107,7 @@ class RefHomoEdgecases:
 
         self.parent.parent.data["LONGEVITY"]["IND"].append(index)
         self.parent.parent.data["LONGEVITY"]["WEIGHT"].append(w)
-        color = self.parent.get_color(w)
+        color = self.parent.parent.get_color(w, 1.5)
         self.parent.parent.data["LONGEVITY"]["WEIGHTCOLOR"].append(color)
         self.parent.parent.data["LONGEVITY"]["POPULATION"].append(record[2])
         self.parent.parent.data["LONGEVITY"]["SNP"].append(rsid)

@@ -81,29 +81,6 @@ class LongevitymapReport:
         return 0
 
 
-    def get_color(self, w):
-        w = float(w)
-        if w < 0:
-            w = w * -1
-            w = 1 - w * 1.5
-            if w < 0:
-                w = 0
-            color = format(int(w * 255), 'x')
-            if len(color) == 1:
-                color = "0" + color
-            color = "ff" + color + color
-        else:
-            w = 1 - w * 1.5
-            if w < 0:
-                w = 0
-            color = format(int(w * 255), 'x')
-            if len(color) == 1:
-                color = "0" + color
-            color = color + "ff" + color
-
-        return color
-
-
     def process_row(self, row):
         if not self._is_active:
             return
@@ -131,7 +108,7 @@ class LongevitymapReport:
         self.col_index += 1
         self.parent.data["LONGEVITY"]["IND"].append(self.col_index)
         self.parent.data["LONGEVITY"]["WEIGHT"].append(w)
-        color = self.get_color(w)
+        color = self.parent.get_color(w, 1.5)
         self.parent.data["LONGEVITY"]["WEIGHTCOLOR"].append(color)
         self.parent.data["LONGEVITY"]["POPULATION"].append(self.parent.get_value(row, 'longevitymap__population'))
         self.parent.data["LONGEVITY"]["SNP"].append(snp)

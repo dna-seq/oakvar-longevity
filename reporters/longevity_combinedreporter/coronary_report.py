@@ -17,7 +17,7 @@ class CoronaryReport:
 
 
     def data(self):
-        return {"IND":[], "RSID":[], "GENE":[], "RISK":[], "GENOTYPE":[], "CONCLUSION":[], "WEIGHT":[], "PMID":[], "POPULATION":[], "STUDYDESIGN":[], "PVALUE":[]}
+        return {"IND":[], "RSID":[], "GENE":[], "RISK":[], "GENOTYPE":[], "CONCLUSION":[], "WEIGHT":[], "PMID":[], "POPULATION":[], "STUDYDESIGN":[], "PVALUE":[], "WEIGHTCOLOR":[]}
 
 
     def setup(self):
@@ -72,6 +72,7 @@ class CoronaryReport:
                 self.parent.data["CORONARY"]["POPULATION"].append(row[6])
                 self.parent.data["CORONARY"]["STUDYDESIGN"].append(row[7])
                 self.parent.data["CORONARY"]["PVALUE"].append(row[8])
+                self.parent.data["CORONARY"]["WEIGHTCOLOR"].append(self.parent.get_color(row[4], 0.6))
 
 
     def end(self):

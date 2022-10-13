@@ -25,7 +25,7 @@ class Reporter(CravatReport):
     dependency_message = ""
 
     template_text = ""
-    sorts = {"LONGEVITY":{"key":"WEIGHT", "type":"float", "reverse":"True"}}
+    sorts = {"LONGEVITY":{"key":"WEIGHT", "type":"float", "reverse":"True"}, "CORONARY":{"key":"WEIGHT", "type":"float", "reverse":"True"}}
     data = {}
     template_vars = {}
     for rep in reports:
@@ -66,6 +66,28 @@ class Reporter(CravatReport):
             columns[col['col_name']] = column
 
         return columns
+
+    def get_color(self, w, scale = 1.5):
+        w = float(w)
+        if w < 0:
+            w = w * -1
+            w = 1 - w * scale
+            if w < 0:
+                w = 0
+            color = format(int(w * 255), 'x')
+            if len(color) == 1:
+                color = "0" + color
+            color = "ff" + color + color
+        else:
+            w = 1 - w * scale
+            if w < 0:
+                w = 0
+            color = format(int(w * 255), 'x')
+            if len(color) == 1:
+                color = "0" + color
+            color = color + "ff" + color
+
+        return color
 
 
     def setup(self):

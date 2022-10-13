@@ -408,7 +408,7 @@ function drawGausian(cnvasId, p, bgColor, gausianColor, percentileColor, filledC
 				<td><a href="https://genomics.senescence.info/longevity/gene.php?id={GENE}">{GENE}</a></td>
 				<td>{RISK}</td>
 				<td>{GENOTYPE}</td><td>{PMID}</td><td>{POPULATION}</td>
-				<td>{PVALUE}</td><td>{WEIGHT}</td></tr>
+				<td>{PVALUE}</td><td style="background-color:#{WEIGHTCOLOR}">{WEIGHT}</td></tr>
 			<tr style="display:none;"><td colspan="11"><b>Conclusion: </b>{CONCLUSION}<br/><b>Study design: </b>{STUDYDESIGN}</td></tr>
 			{CORONARY_END}
 		</tbody>

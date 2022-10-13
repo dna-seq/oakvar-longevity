@@ -53,3 +53,4 @@ class CoronaryRefHomo:
                     self.parent.parent.data["CORONARY"]["POPULATION"].append(row[6])
                     self.parent.parent.data["CORONARY"]["STUDYDESIGN"].append(row[7])
                     self.parent.parent.data["CORONARY"]["PVALUE"].append(row[8])
+                    self.parent.parent.data["CORONARY"]["WEIGHTCOLOR"].append(self.parent.parent.get_color(row[4], 0.6))
