@@ -1,0 +1,3 @@
+[submodule "annotators/longevitymap"]
+	path = annotators/longevitymap
+	url = git@github.com:dna-seq/longevity-annotator.git
