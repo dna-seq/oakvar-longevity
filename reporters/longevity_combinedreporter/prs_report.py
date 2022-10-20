@@ -1,6 +1,6 @@
 import sqlite3
 from sqlite3 import Error
-import os
+from pathlib import Path
 
 SUM = "sum"
 TOTAL = "total"
@@ -10,17 +10,10 @@ INVERS = "invers"
 
 
 class PrsReport:
-    # "PGS001298",
-    # "PGS001017",
-    # "PGS001185",
-    # "PGS001252",
-    "PGS001833"
     prs = {}
     prs_names = []
     # prs5_rsids = []
     sql_get_prs = """SELECT name, title, total, invers FROM prs;"""
-    # sql_get_percentiles = """SELECT name, percent, value FROM percentiles, prs WHERE percentiles.prs_id = prs.id ORDER BY name, value"""
-
 
 
     def init(self, reporter):
@@ -35,18 +28,10 @@ class PrsReport:
         return {"NAME":[], "TITLE":[], "SUM":[], "AVG":[], "COUNT":[], "TOTAL":[], "PERCENT":[], "FRACTION":[], "INVERS":[]}
 
 
-    # def setup_percentile(self):
-    #     self.cursor.execute(self.sql_get_percentiles)
-    #     rows = self.cursor.fetchall()
-    #     for row in rows:
-    #         self.prs[row[0]][PERCENT].append(row[1])
-    #         self.prs[row[0]][VALUE].append(row[2])
-
-
     def setup(self):
-        modules_path = os.path.dirname(__file__)
-        sql_file = modules_path + "/data/prs.sqlite"
-        if os.path.exists(sql_file):
+        # sql_file = os.path.dirname(__file__) + "/data/prs.sqlite"
+        sql_file = str(Path(__file__).parent) + "/data/prs.sqlite"
+        if Path(sql_file).exists():
             conn = sqlite3.connect(sql_file)
             self.cursor = conn.cursor()
             self.cursor.execute(self.sql_get_prs)
@@ -64,16 +49,12 @@ class PrsReport:
         ref = self.parent.get_value(row, 'base__ref_base')
         chrom = self.parent.get_value(row, 'base__chrom')
 
-        # query = f"SELECT prs.name, weights.weight FROM position, prs, weights WHERE chrom = '{chrom}' AND other_allele = '{alt}'" \
-        #         f" AND rsid = '{rsid}' AND weights.posid = position.id AND weights.prsid = prs.id"
-
         query = f"SELECT prs.name, weights.weight, position.effect_allele FROM position, prs, weights WHERE chrom = '{chrom}'" \
                 f" AND rsid = '{rsid}' AND weights.posid = position.id AND weights.prsid = prs.id"
-        # start = time.time_ns()
+
         self.cursor.execute(query)
         rows = self.cursor.fetchall()
-        # print(rows)
-        # print(rsid, alt, chrom)
+
         if len(rows) == 0:
             return
 
@@ -138,18 +119,19 @@ class PrsReport:
                 avg = 0
                 if self.prs[name][COUNT] > 0:
                     avg = self.prs[name][SUM] / (self.prs[name][COUNT] * 2)
-                self.parent.data["PRS"]["NAME"].append(name)
-                self.parent.data["PRS"]["SUM"].append(self.prs[name][SUM])
-                self.parent.data["PRS"]["AVG"].append(avg)
-                self.parent.data["PRS"]["COUNT"].append(self.prs[name][COUNT])
-                self.parent.data["PRS"]["TITLE"].append(self.prs[name][TITLE])
-                self.parent.data["PRS"]["TOTAL"].append(self.prs[name][TOTAL])
+                parent_prs = self.parent.data["PRS"]
+                parent_prs["NAME"].append(name)
+                parent_prs["SUM"].append(self.prs[name][SUM])
+                parent_prs["AVG"].append(avg)
+                parent_prs["COUNT"].append(self.prs[name][COUNT])
+                parent_prs["TITLE"].append(self.prs[name][TITLE])
+                parent_prs["TOTAL"].append(self.prs[name][TOTAL])
                 percent = self.get_percent(name, self.prs[name][SUM])
                 if type(percent) is not float:
                     percent = 0.01
-                self.parent.data["PRS"]["PERCENT"].append(int(percent*100))
-                self.parent.data["PRS"]["FRACTION"].append(percent)
-                self.parent.data["PRS"]["INVERS"].append(self.prs[name][INVERS])
+                parent_prs["PERCENT"].append(int(percent*100))
+                parent_prs["FRACTION"].append(percent)
+                parent_prs["INVERS"].append(self.prs[name][INVERS])
 
         # with open('C:/dev/python/openCravatPlugin/prs_files/rsids_oakvar_PRS5.txt', "w") as f:
         #     f.write("\n".join(self.prs5_rsids))

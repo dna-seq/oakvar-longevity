@@ -1,4 +1,4 @@
-import os
+from pathlib import Path
 
 RSID_COL_NAME = "Variant/Haplotypes"
 DRUGS_COL_NAME = "Drug(s)"
@@ -27,7 +27,7 @@ class DrugsReport:
 
 
     def setup(self):
-        with open(os.path.dirname(__file__)+"/annotation_tab.tsv") as f:
+        with open(str(Path(__file__).parent)+"/data/annotation_tab.tsv") as f:
             self.annotation_tab = {}
             header = True
             head = None
@@ -53,16 +53,17 @@ class DrugsReport:
             return
 
         self.index += 1
-        self.parent.data["DRUGS"]["IND"].append(self.index)
-        self.parent.data["DRUGS"]["RSID"].append(rsid)
-        self.parent.data["DRUGS"]["DRUGS"].append(item[self.head_index_map[DRUGS_COL_NAME]])
-        self.parent.data["DRUGS"]["PHENCAT"].append(item[self.head_index_map[PHENCAT_COL_NAME]])
-        self.parent.data["DRUGS"]["SIGNIFICANCE"].append(item[self.head_index_map[SIGNIFICANCE_COL_NAME]])
-        self.parent.data["DRUGS"]["SENTENCE"].append(item[self.head_index_map[SENTENCE_COL_NAME]])
+        drugs = self.parent.data["DRUGS"]
+        drugs["IND"].append(self.index)
+        drugs["RSID"].append(rsid)
+        drugs["DRUGS"].append(item[self.head_index_map[DRUGS_COL_NAME]])
+        drugs["PHENCAT"].append(item[self.head_index_map[PHENCAT_COL_NAME]])
+        drugs["SIGNIFICANCE"].append(item[self.head_index_map[SIGNIFICANCE_COL_NAME]])
+        drugs["SENTENCE"].append(item[self.head_index_map[SENTENCE_COL_NAME]])
         freq_in_case = item[self.head_index_map[FREQCASES_COL_NAME]]
-        self.parent.data["DRUGS"]["FREQCASES"].append(freq_in_case)
-        self.parent.data["DRUGS"]["FREQCONTROLS"].append(item[self.head_index_map[FREQCONTROLS_COL_NAME]])
-        self.parent.data["DRUGS"]["TYPE"].append(item[self.head_index_map[TYPE_COL_NAME]])
+        drugs["FREQCASES"].append(freq_in_case)
+        drugs["FREQCONTROLS"].append(item[self.head_index_map[FREQCONTROLS_COL_NAME]])
+        drugs["TYPE"].append(item[self.head_index_map[TYPE_COL_NAME]])
         effect = float(item[self.head_index_map[RATIOSTAT_COL_NAME]])
         alt = self.parent.get_value(row, 'base__alt_base')
         if freq_in_case != alt:

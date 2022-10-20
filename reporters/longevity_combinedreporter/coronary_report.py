@@ -1,6 +1,6 @@
 import sqlite3
 from sqlite3 import Error
-import os
+from pathlib import Path
 import coronary_ref_homo
 
 
@@ -22,9 +22,9 @@ class CoronaryReport:
 
     def setup(self):
         self.col_index = 0
-        modules_path = os.path.dirname(__file__)
+        modules_path = str(Path(__file__).parent)
         sql_file = modules_path + "/data/coronary.sqlite"
-        if os.path.exists(sql_file):
+        if Path(sql_file).exists():
             conn = sqlite3.connect(sql_file)
             self.cursor = conn.cursor()
         self.ref_homo.setup()

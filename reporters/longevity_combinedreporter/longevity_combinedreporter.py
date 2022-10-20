@@ -4,8 +4,8 @@ import datetime
 import re
 import csv
 import zipfile
-import os
-cur_path = os.path.dirname(__file__)
+from pathlib import Path
+cur_path = str(Path(__file__).parent)
 sys.path.append(cur_path)
 import templater
 import longevitymap_report
@@ -13,6 +13,7 @@ import cancer_report
 import prs_report
 import drugs_report
 import coronary_report
+import pathlib
 
 class Reporter(CravatReport):
     longevitymap = longevitymap_report.LongevitymapReport()
@@ -32,7 +33,7 @@ class Reporter(CravatReport):
         data[rep.data_name()] = rep.data()
 
     current_level = ""
-    columns = None
+    columns = {}
 
 
     def __init__(self, args):
@@ -44,13 +45,18 @@ class Reporter(CravatReport):
     def col_info(self, level):
         columns_arr = self.colinfo[level]['columns']
         modules_arr = self.colinfo[level]['colgroups']
+
         columns = {}
         modules = {}
         for module in modules_arr:
-            if module['name'] == 'base':
-                module['start'] = module['lastcol'] - module['count']
+            if module.get('lastcol') != None and module.get('count') != None:
+                if module['name'] == 'base':
+                    module['start'] = module['lastcol'] - module['count']
+                else:
+                    module['start'] = module['lastcol'] - module['count'] - 1
             else:
-                module['start'] = module['lastcol'] - module['count'] - 1
+                 module['start'] = module['start_column_number']
+
             modules[module['name']] = module
 
         for col in columns_arr:
@@ -174,7 +180,7 @@ class Reporter(CravatReport):
         text = templater.replace_loop(text, self.data, self.sorts)
         self.outfile.write(text)
         self.outfile.close()
-        return os.path.realpath(self.outfile.name)
+        return Path(self.outfile.name).resolve()
 
 
 ### Don't edit anything below here ###

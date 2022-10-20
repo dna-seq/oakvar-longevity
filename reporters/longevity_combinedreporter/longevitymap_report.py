@@ -1,6 +1,5 @@
 import sqlite3
 from sqlite3 import Error
-import os
 import longevity_ref_homo
 
 
@@ -106,26 +105,27 @@ class LongevitymapReport:
             return
 
         self.col_index += 1
-        self.parent.data["LONGEVITY"]["IND"].append(self.col_index)
-        self.parent.data["LONGEVITY"]["WEIGHT"].append(w)
+        longevity = self.parent.data["LONGEVITY"]
+        longevity["IND"].append(self.col_index)
+        longevity["WEIGHT"].append(w)
         color = self.parent.get_color(w, 1.5)
-        self.parent.data["LONGEVITY"]["WEIGHTCOLOR"].append(color)
-        self.parent.data["LONGEVITY"]["POPULATION"].append(self.parent.get_value(row, 'longevitymap__population'))
-        self.parent.data["LONGEVITY"]["SNP"].append(snp)
-        self.parent.data["LONGEVITY"]["GENE"].append(self.parent.get_value(row, 'longevitymap__genes'))
+        longevity["WEIGHTCOLOR"].append(color)
+        longevity["POPULATION"].append(self.parent.get_value(row, 'longevitymap__population'))
+        longevity["SNP"].append(snp)
+        longevity["GENE"].append(self.parent.get_value(row, 'longevitymap__genes'))
         temp = self._createSubTable(self.parent.get_value(row, 'longevitymap__info'))
         temp += self.parent.get_value(row, 'longevitymap__description').replace("____", "<br/>").replace("__", " ")
-        self.parent.data["LONGEVITY"]["DESCRIPTION"].append(temp)
-        self.parent.data["LONGEVITY"]["CODING"].append(self.parent.get_value(row, 'base__coding'))
-        self.parent.data["LONGEVITY"]["REF"].append(ref)
-        self.parent.data["LONGEVITY"]["ALT"].append(alt)
-        self.parent.data["LONGEVITY"]["CDNACHANGE"].append(self.parent.get_value(row, 'base__cchange'))
-        self.parent.data["LONGEVITY"]["DESEASES"].append(self.parent.get_value(row, 'clinvar__disease_names'))
-        self.parent.data["LONGEVITY"]["ZEGOT"].append(zygot)
-        self.parent.data["LONGEVITY"]["ALELFREQ"].append(self.parent.get_value(row, 'gnomad__af'))
-        self.parent.data["LONGEVITY"]["NUCLEOTIDES"].append(nuq)
-        self.parent.data["LONGEVITY"]["PRIORITY"].append(self.parent.get_value(row, 'longevitymap__priority'))
-        self.parent.data["LONGEVITY"]["NCBIDESC"].append(self.parent.get_value(row, 'ncbigene__ncbi_desc'))
+        longevity["DESCRIPTION"].append(temp)
+        longevity["CODING"].append(self.parent.get_value(row, 'base__coding'))
+        longevity["REF"].append(ref)
+        longevity["ALT"].append(alt)
+        longevity["CDNACHANGE"].append(self.parent.get_value(row, 'base__cchange'))
+        longevity["DESEASES"].append(self.parent.get_value(row, 'clinvar__disease_names'))
+        longevity["ZEGOT"].append(zygot)
+        longevity["ALELFREQ"].append(self.parent.get_value(row, 'gnomad__af'))
+        longevity["NUCLEOTIDES"].append(nuq)
+        longevity["PRIORITY"].append(self.parent.get_value(row, 'longevitymap__priority'))
+        longevity["NCBIDESC"].append(self.parent.get_value(row, 'ncbigene__ncbi_desc'))
 
 
     def end(self):

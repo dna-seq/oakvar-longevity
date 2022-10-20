@@ -1,4 +1,4 @@
-import os
+from pathlib import Path
 
 class CancerReport:
     genes = set()
@@ -30,7 +30,7 @@ class CancerReport:
                       "PHENOTYPE":[], "SIGNIFICANCE":[], "NCBI":[]}
 
     def setup(self):
-        with open(os.path.dirname(__file__)+"/genes.txt") as f:
+        with open(str(Path(__file__).parent)+"/data/genes.txt") as f:
             self.genes = set(f.read().split("\n"))
 
     def process_row(self, row):

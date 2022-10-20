@@ -1,6 +1,6 @@
 import sqlite3
 from sqlite3 import Error
-import os
+from pathlib import Path
 
 ALLELE = "allele"
 EXIST = "exist"
@@ -105,32 +105,34 @@ class RefHomoEdgecases:
         zygot = "hom"
         nuq = allele + "/" + allele
 
-        self.parent.parent.data["LONGEVITY"]["IND"].append(index)
-        self.parent.parent.data["LONGEVITY"]["WEIGHT"].append(w)
+        longevity = self.parent.parent.data["LONGEVITY"]
+
+        longevity["IND"].append(index)
+        longevity["WEIGHT"].append(w)
         color = self.parent.parent.get_color(w, 1.5)
-        self.parent.parent.data["LONGEVITY"]["WEIGHTCOLOR"].append(color)
-        self.parent.parent.data["LONGEVITY"]["POPULATION"].append(record[2])
-        self.parent.parent.data["LONGEVITY"]["SNP"].append(rsid)
-        self.parent.parent.data["LONGEVITY"]["GENE"].append(record[4])
+        longevity["WEIGHTCOLOR"].append(color)
+        longevity["POPULATION"].append(record[2])
+        longevity["SNP"].append(rsid)
+        longevity["GENE"].append(record[4])
         temp = self.parent._createSubTable(record[6])
         temp += record[7].replace("____", "<br/>").replace("__", " ")
-        self.parent.parent.data["LONGEVITY"]["DESCRIPTION"].append(temp)
-        self.parent.parent.data["LONGEVITY"]["CODING"].append("")
-        self.parent.parent.data["LONGEVITY"]["REF"].append(ref)
-        self.parent.parent.data["LONGEVITY"]["ALT"].append(alt)
-        self.parent.parent.data["LONGEVITY"]["CDNACHANGE"].append("")
-        self.parent.parent.data["LONGEVITY"]["DESEASES"].append("")
-        self.parent.parent.data["LONGEVITY"]["ZEGOT"].append(zygot)
-        self.parent.parent.data["LONGEVITY"]["ALELFREQ"].append("")
-        self.parent.parent.data["LONGEVITY"]["NUCLEOTIDES"].append(nuq)
-        self.parent.parent.data["LONGEVITY"]["PRIORITY"].append("0")
-        self.parent.parent.data["LONGEVITY"]["NCBIDESC"].append("")
+        longevity["DESCRIPTION"].append(temp)
+        longevity["CODING"].append("")
+        longevity["REF"].append(ref)
+        longevity["ALT"].append(alt)
+        longevity["CDNACHANGE"].append("")
+        longevity["DESEASES"].append("")
+        longevity["ZEGOT"].append(zygot)
+        longevity["ALELFREQ"].append("")
+        longevity["NUCLEOTIDES"].append(nuq)
+        longevity["PRIORITY"].append("0")
+        longevity["NCBIDESC"].append("")
 
 
     def setup(self):
-        modules_path = os.path.dirname(os.path.dirname(os.path.dirname(__file__)))
+        modules_path = str(Path(__file__).parent.parent.parent)
         sql_file = modules_path + "/annotators/longevitymap/data/longevitymap.sqlite"
-        if os.path.exists(sql_file):
+        if Path(sql_file).exists():
             longevitymap_conn = sqlite3.connect(sql_file)
             self.cursor = longevitymap_conn.cursor()
             try:

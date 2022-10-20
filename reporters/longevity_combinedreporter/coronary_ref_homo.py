@@ -1,6 +1,5 @@
 import sqlite3
 from sqlite3 import Error
-import os
 
 
 class CoronaryRefHomo:
@@ -42,15 +41,16 @@ class CoronaryRefHomo:
                 row = self.parent.cursor.fetchone()
                 if row:
                     col_index += 1
-                    self.parent.parent.data["CORONARY"]["IND"].append(col_index)
-                    self.parent.parent.data["CORONARY"]["RSID"].append(rsid)
-                    self.parent.parent.data["CORONARY"]["GENE"].append(row[1])
-                    self.parent.parent.data["CORONARY"]["RISK"].append(row[0])
-                    self.parent.parent.data["CORONARY"]["GENOTYPE"].append(row[0]+"/"+row[0])
-                    self.parent.parent.data["CORONARY"]["CONCLUSION"].append(row[3])
-                    self.parent.parent.data["CORONARY"]["WEIGHT"].append(row[4])
-                    self.parent.parent.data["CORONARY"]["PMID"].append(row[5])
-                    self.parent.parent.data["CORONARY"]["POPULATION"].append(row[6])
-                    self.parent.parent.data["CORONARY"]["STUDYDESIGN"].append(row[7])
-                    self.parent.parent.data["CORONARY"]["PVALUE"].append(row[8])
-                    self.parent.parent.data["CORONARY"]["WEIGHTCOLOR"].append(self.parent.parent.get_color(row[4], 0.6))
+                    coranary = self.parent.parent.data["CORONARY"]
+                    coranary["IND"].append(col_index)
+                    coranary["RSID"].append(rsid)
+                    coranary["GENE"].append(row[1])
+                    coranary["RISK"].append(row[0])
+                    coranary["GENOTYPE"].append(row[0]+"/"+row[0])
+                    coranary["CONCLUSION"].append(row[3])
+                    coranary["WEIGHT"].append(row[4])
+                    coranary["PMID"].append(row[5])
+                    coranary["POPULATION"].append(row[6])
+                    coranary["STUDYDESIGN"].append(row[7])
+                    coranary["PVALUE"].append(row[8])
+                    coranary["WEIGHTCOLOR"].append(self.parent.parent.get_color(row[4], 0.6))
