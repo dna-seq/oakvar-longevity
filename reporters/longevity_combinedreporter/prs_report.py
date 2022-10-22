@@ -42,9 +42,12 @@ class PrsReport:
 
 
     def process_row(self, row):
-        rsid = self.parent.get_value(row, 'dbsnp__rsid')
-        if rsid is None:
+        rsid = str(self.parent.get_value(row, 'dbsnp__rsid'))
+        if rsid == '':
             return
+
+        if not rsid.startswith("rs"):
+            rsid = 'rs' + rsid
         alt = self.parent.get_value(row, 'base__alt_base')
         ref = self.parent.get_value(row, 'base__ref_base')
         chrom = self.parent.get_value(row, 'base__chrom')

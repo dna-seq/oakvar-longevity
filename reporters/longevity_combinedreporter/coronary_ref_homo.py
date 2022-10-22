@@ -19,9 +19,12 @@ class CoronaryRefHomo:
 
 
     def process_row(self, row):
-        rsid = self.parent.parent.get_value(row, 'dbsnp__rsid')
-        if rsid is None:
+        rsid = str(self.parent.parent.get_value(row, 'dbsnp__rsid'))
+        if rsid == '':
             return
+
+        if not rsid.startswith('rs'):
+            rsid = "rs"+rsid
 
         item = self.rsid_map.get(rsid)
         if item:

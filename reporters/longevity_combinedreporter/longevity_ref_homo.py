@@ -150,7 +150,11 @@ class RefHomoEdgecases:
             return
         if len(self.ref_homo_map) == 0:
             return
-        rsid = self.parent.parent.get_value(row, 'dbsnp__rsid')
+        rsid = str(self.parent.parent.get_value(row, 'dbsnp__rsid'))
+        if rsid == '':
+            return
+        if not rsid.startswith('rs'):
+            rsid = "rs"+rsid
         item = self.ref_homo_map.get(rsid)
         if item:
             zygot = self.parent.parent.get_value(row, 'vcfinfo__zygosity')

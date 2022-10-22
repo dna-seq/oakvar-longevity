@@ -35,6 +35,7 @@ class CancerReport:
 
     def process_row(self, row):
         significance = self.parent.get_value(row, 'clinvar__sig')  # row[self.columns['clinvar__sig']['ind']]
+
         if significance not in self.significance_filter:
             return
 

@@ -47,7 +47,11 @@ class DrugsReport:
 
 
     def process_row(self, row):
-        rsid = self.parent.get_value(row, 'dbsnp__rsid')
+        rsid = str(self.parent.get_value(row, 'dbsnp__rsid'))
+        if rsid == '':
+            return
+        if not rsid.startswith("rs"):
+            rsid = 'rs'+rsid
         item = self.annotation_tab.get(rsid)
         if item is None:
             return

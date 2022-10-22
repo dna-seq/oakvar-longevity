@@ -99,6 +99,7 @@ class Reporter(CravatReport):
     def setup(self):
         # setup is called first. Use it to open output files
         # Make output paths by appending to self.savepath
+        self.dictrow = True
         outpath = f'{self.savepath}.longevity_combined.html'
         self.outfile = open(outpath, 'w', encoding='utf-8')
         with open(cur_path+"/template.html") as f:
@@ -144,6 +145,11 @@ class Reporter(CravatReport):
             #     print(self.columns[field])
 
     def get_value(self, row, name):
+        if hasattr(self, "dictrow") and self.dictrow:
+            val = row.get(name)
+            if val is None:
+                return ''
+            return val
         col = self.columns.get(name)
         if col is not None:
             ind = col["ind"]
