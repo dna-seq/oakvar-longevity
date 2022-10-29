@@ -1,6 +1,7 @@
 import pymysql
 import sqlite3
 from sqlite3 import Error
+import click
 
 sql_create_genes = """CREATE TABLE IF NOT EXISTS `gene` (
   `id` integer NOT NULL PRIMARY KEY,
@@ -129,126 +130,134 @@ sql_insert_into_snp_table = """INSERT INTO snps (id, rsid, chrom, pos, ref, alt)
 
 sql_table_names = """ SELECT name FROM sqlite_master WHERE type='table'; """
 
-conn = sqlite3.connect(r"pedro_db.sqlite")
+@click.command()
+@click.option('--pedrodb', default='pedro_db.sqlite', help='Path to the Pedro_db')
+@click.option('--dbsnp', default='C:/dev/python/openCravatPlugin/modules/annotators/dbsnp/data/dbsnp.sqlite', help='Path to the dbSNP')
+def migrate(pedrodb, dbsnp):
 
-db = pymysql.connect(host="localhost",user="root",password="sndmsg4m",database="longavitymap")
+    conn = sqlite3.connect(pedrodb)
 
-cursor = db.cursor()
+    db = pymysql.connect(host="localhost",user="root",password="sndmsg4m",database="longavitymap")
 
-# cursor.execute("SELECT * FROM gene")
-# data = cursor.fetchone()
+    cursor = db.cursor()
 
-def execute_sql(conn, sql):
+    # cursor.execute("SELECT * FROM gene")
+    # data = cursor.fetchone()
+
+    def execute_sql(conn, sql):
+        try:
+            c = conn.cursor()
+            c.execute(sql)
+        except Error as e:
+            print(e)
+            print(sql)
+
+    def migrate_table(conn, cursor, select, insert):
+        try:
+            cursor.execute(select)
+            rows = cursor.fetchall()
+            c = conn.cursor()
+
+            for row in rows:
+                c.execute(insert, row)
+        except Error as e:
+            print(e)
+
+
+    execute_sql(conn, sql_create_genes)
+    execute_sql(conn, sql_create_population)
+    execute_sql(conn, sql_create_variant)
+    execute_sql(conn, sql_create_snp_table)
+    print("Create tabeles Finished")
+
+    migrate_table(conn, cursor, sql_select_gene, sql_insert_gene)
+    print("Migrate gene Finished")
+    migrate_table(conn, cursor, sql_select_population, sql_insert_population)
+    print("Migrate population Finished")
+    migrate_table(conn, cursor, sql_select_variant, sql_insert_variant)
+    print("Migrate variant Finished")
+
+    #-----------------------------------------------------------------------------------
+
+    f = open("fixes.sql")
+    sql_updates = f.read()
+    f.close()
+
     try:
         c = conn.cursor()
-        c.execute(sql)
+        c.executescript(sql_updates)
+        c.execute(sql_create_index_snp)
     except Error as e:
         print(e)
-        print(sql)
 
-def migrate_table(conn, cursor, select, insert):
-    try:
-        cursor.execute(select)
-        rows = cursor.fetchall()
+    print("SQL fixes Finished")
+
+    #--------------------------------------------------------------------------------------
+
+    def getChromTables(conn, sql):
+        tables = []
+        try:
+            c = conn.cursor()
+            c.execute(sql)
+            res = c.fetchall()
+            for item in res:
+                tables.append(item[0])
+        except Error as e:
+            print(e)
+
+        return tables
+
+    def get_dbsnp_records(conn, snp, tables):
         c = conn.cursor()
+        try:
+            sql = ""
+            for i, table in enumerate(tables):
+                sql += "SELECT '"+table+"', * FROM "+table+" WHERE snp = "+str(snp[2:]);
+                if i < 24:
+                    sql += " UNION "
 
-        for row in rows:
-            c.execute(insert, row)
+            c.execute(sql)
+        except Error as e:
+            print(e)
+        return c.fetchall()
+
+    conn_snp = sqlite3.connect(dbsnp)
+
+    tables = getChromTables(conn_snp, sql_table_names)
+
+    try:
+        snpId = 0
+        c = conn.cursor()
+        c.execute(sql_select_distinct_identifire)
+        snps = c.fetchall()
+        for snp in snps:
+            snp = snp[0]
+            records = get_dbsnp_records(conn_snp, snp, tables)
+            for record in records:
+                task = (snpId, snp, record[0], int(record[1]), record[2], record[3])
+                c.execute(sql_insert_into_snp_table, task)
+                snpId += 1
     except Error as e:
         print(e)
 
+    f = open("post_fixes.sql")
+    sql_updates = f.read()
+    f.close()
 
-execute_sql(conn, sql_create_genes)
-execute_sql(conn, sql_create_population)
-execute_sql(conn, sql_create_variant)
-execute_sql(conn, sql_create_snp_table)
-print("Create tabeles Finished")
-
-migrate_table(conn, cursor, sql_select_gene, sql_insert_gene)
-print("Migrate gene Finished")
-migrate_table(conn, cursor, sql_select_population, sql_insert_population)
-print("Migrate population Finished")
-migrate_table(conn, cursor, sql_select_variant, sql_insert_variant)
-print("Migrate variant Finished")
-
-#-----------------------------------------------------------------------------------
-
-f = open("fixes.sql")
-sql_updates = f.read()
-f.close()
-
-try:
-    c = conn.cursor()
-    c.executescript(sql_updates)
-    c.execute(sql_create_index_snp)
-except Error as e:
-    print(e)
-
-print("SQL fixes Finished")
-
-#--------------------------------------------------------------------------------------
-
-def getChromTables(conn, sql):
-    tables = []
     try:
         c = conn.cursor()
-        c.execute(sql)
-        res = c.fetchall()
-        for item in res:
-            tables.append(item[0])
+        c.executescript(sql_updates)
     except Error as e:
         print(e)
 
-    return tables
-
-def get_dbsnp_records(conn, snp, tables):
-    c = conn.cursor()
-    try:
-        sql = ""
-        for i, table in enumerate(tables):
-            sql += "SELECT '"+table+"', * FROM "+table+" WHERE snp = "+str(snp[2:]);
-            if i < 24:
-                sql += " UNION "
-
-        c.execute(sql)
-    except Error as e:
-        print(e)
-    return c.fetchall()
-
-conn_snp = sqlite3.connect(r"C:/dev/python/openCravatPlugin/modules/annotators/dbsnp/data/dbsnp.sqlite")
-
-tables = getChromTables(conn_snp, sql_table_names)
-
-try:
-    snpId = 0
-    c = conn.cursor()
-    c.execute(sql_select_distinct_identifire)
-    snps = c.fetchall()
-    for snp in snps:
-        snp = snp[0]
-        records = get_dbsnp_records(conn_snp, snp, tables)
-        for record in records:
-            task = (snpId, snp, record[0], int(record[1]), record[2], record[3])
-            c.execute(sql_insert_into_snp_table, task)
-            snpId += 1
-except Error as e:
-    print(e)
-
-f = open("post_fixes.sql")
-sql_updates = f.read()
-f.close()
-
-try:
-    c = conn.cursor()
-    c.executescript(sql_updates)
-except Error as e:
-    print(e)
-
-print("SQL post fixes Finished")
+    print("SQL post fixes Finished")
 
 
-db.close()
-conn.commit()
-conn.close()
+    db.close()
+    conn.commit()
+    conn.close()
 
-print("Finish")
+    print("Finish")
+
+if __name__ == "__main__":
+    migrate()
