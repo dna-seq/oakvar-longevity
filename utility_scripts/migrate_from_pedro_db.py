@@ -133,7 +133,7 @@ sql_table_names = """ SELECT name FROM sqlite_master WHERE type='table'; """
 @click.command()
 @click.option('--pedrodb', default='pedro_db.sqlite', help='Path to the Pedro_db')
 @click.option('--dbsnp', default='C:/dev/python/openCravatPlugin/modules/annotators/dbsnp/data/dbsnp.sqlite', help='Path to the dbSNP')
-def migrate(pedrodb, dbsnp):
+def migrate(pedrodb: str, dbsnp: str):
 
     conn = sqlite3.connect(pedrodb)
 

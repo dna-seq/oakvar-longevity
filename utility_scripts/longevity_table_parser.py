@@ -114,7 +114,7 @@ def create_dbsnp_index(conn, tables):
 @click.option('--dbsnp', default='D:/dev/oakVar/modules/annotators/dbsnp/data/dbsnp.sqlite', help='Path to the dbSNP')
 @click.option('--lmap', default='longevitymap.sqlite', help='Path to the LongevityMap')
 @click.option('--tsv', default='longevitymap.tsv', help='Path to the longevitymap.tsv file')
-def parser(dbsnp, lmap, tsv):
+def parser(dbsnp: str, lmap: str, tsv: str):
     dbsnp_conn = sqlite3.connect(dbsnp)
     dbsnp_tables = getChromTables(dbsnp_conn, sql_table_names)
     create_dbsnp_index(dbsnp_conn, dbsnp_tables)
@@ -134,7 +134,7 @@ def parser(dbsnp, lmap, tsv):
     idIndex = 0
     length = df.shape[0] #628
     print("length:", length)
-    errors = []
+    errors = [
     norsids = []
     rsid_map = set()
     for i in range(length):
