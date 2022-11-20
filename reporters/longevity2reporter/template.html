@@ -1,83 +1,37 @@
 <!doctype html>
-
 <html lang="en">
 <head>
 	<meta charset="utf-8">
-	<style>
-		table, th, td {
-		  border: 1px solid black;
-		}
-		thead {font-weight: bold; background-color:#dddddd}
-		tbody{background-color:#eeeeee}
-		th, td {
-		  padding: 10px;
-		}
-		.clickable:hover {cursor:pointer; background-color:#e0e0e0;}
-</style>
-<script>
-function expand(obj){
-	var tdEl = obj.children[0];
-	var el = obj.nextSibling;
-	if (el.nodeName == "#text")
-		el = el.nextSibling;
-
-	el.style.display = "";
-	tdEl.innerHTML = "-";
-	//obj.style.backgroundColor = "#e0e0e0";
-}
-
-function collapse(obj){
-	var tdEl = obj.children[0];
-	var el = obj.nextSibling;
-	if (el.nodeName == "#text")
-		el = el.nextSibling;
-		
-	el.style.display = "none";
-	tdEl.innerHTML = "+";
-	//obj.style.backgroundColor = "#eeeeee";
-}
-
-function doOnClick(obj){
-	var tdEl = obj.children[0];
-	var el = obj.nextSibling;
-	if (el.nodeName == "#text")
-		el = el.nextSibling;
-
-	if(el.style.display == "none")
-		expand(obj);
-	else 
-		collapse(obj);
-}
-
-function collapseExpandAll(obj){
-	var el = document.getElementById("signTBody");
-	if(obj.innerHTML == "+"){
-		for(var i in el.children)
-			if(el.children[i].children && el.children[i].children.length > 3)
-				expand(el.children[i]);
-		obj.innerHTML = "-";
-	} else {
-		for(var i in el.children)
-			if(el.children[i].children && el.children[i].children.length > 3)
-				collapse(el.children[i]);
-		obj.innerHTML = "+";
-	}
-}
-</script>
 </head>
 
 <body>
-	<h1 align="center">Significant variations.</h1>
+% for section_name in data:
+	<h1 align="center">${section_name}</h1>
 	<br/>
-	<table width="80%" align="center">
-		<thead>
-			<tr><td class="clickable" style="width:2%;" onclick="collapseExpandAll(this)">+</td><td style="width:5%;">ID</td><td style="width:7%;">Significance</td><td>Population</td><td style="width:10%;">RSID</td><td style="width:10%;">Gene</td><td style="width:10%;">PubMed Id</td></tr>
-		</thead>
-		<tbody id="signTBody">
-			{DATA_START}<tr class="clickable" onclick="doOnClick(this)"><td>+</td><td>{ID}</td><td>{SIGNIFICANCE}</td><td>{POPULATION}</td><td>{SNP}</td><td>{GENE}</td><td>{PUBMED}</td></tr>
-			<tr style="display:none;"><td colspan="7">{DESCRIPTION}</td></tr>
-			{DATA_END}
-		</tbody>
-	</table>
+	<ul>
+	% for row in data[section_name]:
+		<li>
+			<ul>
+		% for cel_name in row:
+				<li>
+			% if type(row[cel_name]) is dict:
+				${cel_name}:<ul>
+				% for key in row[cel_name]:
+					<li>${key}: ${row[cel_name][key]}</li>
+				% endfor
+				</ul>
+			% else:
+				${cel_name}: ${row[cel_name]}
+			% endif
+				</li>
+		% endfor
+			</ul>
+		</li>
+	% endfor
+
+
+	</ul>
+% endfor
+
 </body>
 </html>
