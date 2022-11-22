@@ -53,7 +53,7 @@ class CravatPostAggregator (BasePostAggregator):
             )"""
         self.longevity_cursor.execute(sql_create)
         self.longevity_conn.commit()
-        self.longevity_cursor.execute("DELETE FROM prs;")
+        self.longevity_cursor.execute("DELETE FROM drugs;")
 
     
     def cleanup (self):

@@ -48,8 +48,8 @@ class CravatPostAggregator (BasePostAggregator):
             pmid text,
             population text,
             studydesign text,
-            pvalue float,
-            weightcolor float            
+            pvalue text,
+            weightcolor text            
             )"""
         self.longevity_cursor.execute(sql_create)
         self.longevity_conn.commit()
@@ -125,7 +125,7 @@ class CravatPostAggregator (BasePostAggregator):
 
             if gen_set == row_gen:
                 task = (rsid, row[1], allele, genome, row[3], float(row[4]), row[5], row[6], row[7],
-                        float(row[8]), self.get_color(row[4], 0.6))
+                        row[8], self.get_color(row[4], 0.6))
                 self.longevity_cursor.execute(self.sql_insert, task)
 
         return {"col1":""}
