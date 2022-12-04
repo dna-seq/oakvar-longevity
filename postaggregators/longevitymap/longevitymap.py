@@ -7,6 +7,9 @@ import sqlite3
 import longevitymap_ref_homo
 import json
 
+MULTIPLE_CONST = "multiple"
+CONFLICTED_CONST = "conflicted"
+CONFLICTED_INDEX = -1
 
 class CravatPostAggregator (BasePostAggregator):
     sql_insert = """ INSERT INTO longevitymap (
