@@ -1,4 +1,4 @@
-title: Test postagregator
+title: PRS postagregator
 version: 0.1.0
 data_version: 0.1.0
 requires_opencravat: '>=1.8.1'
