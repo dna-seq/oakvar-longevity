@@ -3,7 +3,7 @@ version: 0.3.0
 type: reporter
 description: Create report with longevity ralated information (pre alpha version). It deppends on postagregators .
 output_filename_schema:
-- '{run_name}.longevity_combined.html'
+- '{run_name}.longevity2.html'
 developer:
   name: DNA-seq
   organization: DNA-seq
