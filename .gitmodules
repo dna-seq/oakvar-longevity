@@ -1,3 +1,6 @@
 [submodule "annotators/longevitymap"]
 	path = annotators/longevitymap
 	url = git@github.com:dna-seq/longevity-annotator.git
+[submodule "reporters/longevity2reporter"]
+	path = reporters/longevity2reporter
+	url = https://github.com/dna-seq/longevity2reporter.git
