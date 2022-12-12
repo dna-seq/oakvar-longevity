@@ -4,3 +4,6 @@
 [submodule "reporters/longevity2reporter"]
 	path = reporters/longevity2reporter
 	url = https://github.com/dna-seq/longevity2reporter.git
+[submodule "postaggregators/just_cancer"]
+	path = postaggregators/just_cancer
+	url = https://github.com/dna-seq/just_cancer.git
