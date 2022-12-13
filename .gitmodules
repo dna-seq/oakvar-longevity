@@ -13,3 +13,6 @@
 [submodule "postaggregators/just_drugs"]
 	path = postaggregators/just_drugs
 	url = https://github.com/dna-seq/just_drugs.git
+[submodule "postaggregators/just_longevitymap"]
+	path = postaggregators/just_longevitymap
+	url = https://github.com/dna-seq/just_longevitymap.git
