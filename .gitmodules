@@ -10,3 +10,6 @@
 [submodule "postaggregators/just_coronary"]
 	path = postaggregators/just_coronary
 	url = https://github.com/dna-seq/just_coronary.git
+[submodule "postaggregators/just_drugs"]
+	path = postaggregators/just_drugs
+	url = https://github.com/dna-seq/just_drugs.git
