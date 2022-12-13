@@ -7,3 +7,6 @@
 [submodule "postaggregators/just_cancer"]
 	path = postaggregators/just_cancer
 	url = https://github.com/dna-seq/just_cancer.git
+[submodule "postaggregators/just_coronary"]
+	path = postaggregators/just_coronary
+	url = https://github.com/dna-seq/just_coronary.git
