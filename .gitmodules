@@ -16,3 +16,6 @@
 [submodule "postaggregators/just_longevitymap"]
 	path = postaggregators/just_longevitymap
 	url = https://github.com/dna-seq/just_longevitymap.git
+[submodule "postaggregators/just_prs"]
+	path = postaggregators/just_prs
+	url = https://github.com/dna-seq/just_prs.git
