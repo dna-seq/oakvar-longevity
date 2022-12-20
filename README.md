@@ -4,14 +4,16 @@
 
 
 The repository contains:
-* annotators:
+* postaggregators:
 
-  **longevitymap** - [annotator for longevity genetic polymorphism](https://github.com/dna-seq/longevity-annotator) imported as a git submodule
-
-  **prs** - for polygenic risk scores
+  **just_longevitymap** - postagregator for longevity report in oakvar
+  
+  **just_prs** -  postagregato for polygenic risk scores
+  
+  **just_cancer** and **just_coronary**-  postagregator for major health risks
 * reporters:
 
-  **longevity_combinedreporter** - outputs prs, longevity report, cancer report
+  **longevity2reporter** - outputs prs, longevity report, major risks report (contains cancer and coronary arthery diseases)
 
 * webviewerwidgets:
 
