@@ -19,3 +19,6 @@
 [submodule "postaggregators/just_prs"]
 	path = postaggregators/just_prs
 	url = https://github.com/dna-seq/just_prs.git
+[submodule "postaggregators/just_cardio"]
+	path = postaggregators/just_cardio
+	url = https://github.com/dna-seq/just_cardio.git
