@@ -50,6 +50,6 @@ git submodule update --recursive --remote
 
 # Documentation
 
-You can learn how to install and use modules from this repository from [Just-DNA-Seq Documentation](https://just-dna-seq.readthedocs.io/en/oakvar/viewing-reports.html)
+You can learn how to install and use modules from this repository from [Just-DNA-Seq Documentation](https://just-dna-seq.readthedocs.io/en/oakvar/index.html)
 
 You can join our [discord](https://discord.gg/5WU6aSANXy) if you want to discuss the project or if you encountered any issue.
