@@ -3,6 +3,7 @@ import random
 import scipy.stats as stat
 from sqlite3 import Error
 import time
+import numpy as np
 
 
 def select_one(conn, sql):
@@ -19,6 +20,7 @@ class DBHelper:
 
     def __init__(self, conn_gnom, conn_dbsnp):
         self.conn_gnom = conn_gnom
+        self.gnom_cursor = conn_gnom.cursor()
         self.conn_dbsnp = conn_dbsnp
         self.tables = self.getChromTables()
 
@@ -75,20 +77,37 @@ class DBHelper:
     freq_index_map[SOUTH_ASIAN] = 8
 
     # should corуsspond to freq_index_map
-    def select_freq(self, chrom, pos, ref, alt):
-        sql = f"SELECT af, af_afr, af_amr, af_asj, af_eas, af_fin, af_nfe, af_oth, af_sas " \
-              f"FROM {chrom} WHERE pos = {pos} AND ref = '{ref}' AND alt = '{alt}'"
-        return select_one(self.conn_gnom, sql)
+    def select_freq(self, chrom, pos, ref, effect_allele):
+        sql = f"SELECT ref, alt, af, af_afr, af_amr, af_asj, af_eas, af_fin, af_nfe, af_oth, af_sas " \
+              f"FROM {chrom} WHERE pos = {pos}"
+
+        self.gnom_cursor.execute(sql)
+        records = self.gnom_cursor.fetchall()
+        prob = np.zeros(9, dtype=np.float64)
+        if ref == effect_allele:
+            for record in records:
+                prob += np.array(record[2:], dtype=np.float64)
+            prob = np.ones(9) - prob
+            prob = np.where(prob < 0, 0, prob)
+        else:
+            for record in records:
+                if record[1] == effect_allele:
+                    prob = np.array(record[2:], dtype=np.float64)
+                    break
+
+        prob = np.where(np.isnan(prob), 0, prob)
+
+        return prob
 
 
-    def select_freq_snp(self, snp, alt):
-        records = self.get_dbsnp_records(snp, alt)
-        if len(records) == 0:
-            return None
-        chrom, pos, ref, alt, snp = records[0]
-        return self.select_freq(chrom, pos, ref, alt)
+    # def select_freq_snp(self, snp, alt):
+    #     records = self.get_dbsnp_records(snp, alt)
+    #     if len(records) == 0:
+    #         return None
+    #     chrom, pos, ref, alt, snp = records[0]
+    #     return self.select_freq(chrom, pos, ref, alt)
 
-    sql_select_prs = "SELECT rsid, alt, weight FROM position, prs, weights " \
+    sql_select_prs = "SELECT chrom, pos, ref, effect_allele, weight FROM position, prs, weights " \
             "WHERE prs.id = weights.prsid AND weights.posid = position.id AND prs.name = '"
 
     def get_probabilities(self, conn_prs, prs_name, populations):
@@ -102,10 +121,10 @@ class DBHelper:
             c.execute(sql)
             record = c.fetchone()
             while record != None:
-                freq_record = helper.select_freq_snp(record[0], record[1])
+                freq_record = helper.select_freq(record[0], record[1], record[2], record[3])
 
                 if freq_record is not None:
-                    prob[self.WEIGHT].append(record[2])
+                    prob[self.WEIGHT].append(record[4])
                     for pop in populations:
                         prob[pop].append(freq_record[self.freq_index_map[pop]])
                 record = c.fetchone()
@@ -209,8 +228,22 @@ def get_statistics(data, populations, prs_helper = None):
     return res
 
 
+def parse_prs(helper, conn_prs, populations, prs_name):
+    print("Start "+prs_name)
+    prob = helper.get_probabilities(conn_prs, prs_name, populations)
+    sum = 0
+    for i in range(len(prob[DBHelper.WEIGHT])):
+        if not np.isnan(prob[DBHelper.WEIGHT][i]) and not np.isnan(prob[DBHelper.ALEL_FREQENCY][i]):
+            sum += float(prob[DBHelper.WEIGHT][i])*float(prob[DBHelper.ALEL_FREQENCY][i])
+        else:
+            print("something is nan:", prob[DBHelper.WEIGHT][i], prob[DBHelper.ALEL_FREQENCY][i], i)
+    print(f"Math Expectation ({prs_name}):", sum*2)
+    data = sample_distribution(prob, populations, 10000)
+    get_statistics(data, populations, PrsDbHelper(conn_prs, prs_name))
+    print("Finish " + prs_name)
+
 if __name__ == "__main__":
-    db_file_gnom = r"D:\dev\oakVar\modules\annotators\gnomad\data\gnomad.sqlite"
+    db_file_gnom = r"D:\dev\oakVar\modules\annotators\gnomad3\data\gnomad3.sqlite"
     conn_gnom = sqlite3.connect(db_file_gnom)
 
     db_file_dbsnp = r"D:\dev\oakVar\modules\annotators\dbsnp\data\dbsnp.sqlite"
@@ -226,30 +259,37 @@ if __name__ == "__main__":
     populations = [DBHelper.ALEL_FREQENCY]
 
     start = time.time()
-    # prob = helper.get_probabilities(conn_prs, "PRS5", populations)
+
+    prob = helper.get_probabilities(conn_prs, "PRS5", populations)
 
     # prob = get_probabilities_from_PRS_catalog_format("PRS5_pgscatalog_format.txt")
+    data = sample_distribution(prob, populations, 10000)
+    res = get_statistics(data, populations, PrsDbHelper(conn_prs, "PRS5"))
+
+    # parse_prs(helper, conn_prs, populations, "PGS002724")
+    parse_prs(helper, conn_prs, populations, "PGS000931")
+    parse_prs(helper, conn_prs, populations, "PGS000818")
+    parse_prs(helper, conn_prs, populations, "PGS001839")
+    parse_prs(helper, conn_prs, populations, "PGS000314")
+
+    # prob = helper.get_probabilities(conn_prs, "PGS000931", populations)
     # data = sample_distribution(prob, populations, 10000)
-    # res = get_statistics(data, populations, PrsDbHelper(conn_prs, "PRS5"))
-
-    prob = helper.get_probabilities(conn_prs, "PGS000931", populations)
-    data = sample_distribution(prob, populations, 10000)
-    res = get_statistics(data, populations, PrsDbHelper(conn_prs, "PGS000931"))
-
-    prob = helper.get_probabilities(conn_prs, "PGS000818", populations)
-    data = sample_distribution(prob, populations, 10000)
-    res = get_statistics(data, populations, PrsDbHelper(conn_prs, "PGS000818"))
-
-    prob = helper.get_probabilities(conn_prs, "PGS001839", populations)
-    data = sample_distribution(prob, populations, 10000)
-    res = get_statistics(data, populations, PrsDbHelper(conn_prs, "PGS001839"))
-
-    prob = helper.get_probabilities(conn_prs, "PGS000314", populations)
-    data = sample_distribution(prob, populations, 10000)
-    res = get_statistics(data, populations, PrsDbHelper(conn_prs, "PGS000314"))
+    # res = get_statistics(data, populations, PrsDbHelper(conn_prs, "PGS000931"))
+    #
+    # prob = helper.get_probabilities(conn_prs, "PGS000818", populations)
+    # data = sample_distribution(prob, populations, 10000)
+    # res = get_statistics(data, populations, PrsDbHelper(conn_prs, "PGS000818"))
+    #
+    # prob = helper.get_probabilities(conn_prs, "PGS001839", populations)
+    # data = sample_distribution(prob, populations, 10000)
+    # res = get_statistics(data, populations, PrsDbHelper(conn_prs, "PGS001839"))
+    #
+    # prob = helper.get_probabilities(conn_prs, "PGS000314", populations)
+    # data = sample_distribution(prob, populations, 10000)
+    # res = get_statistics(data, populations, PrsDbHelper(conn_prs, "PGS000314"))
 
     print(time.time() - start)
-    print(res)
+    print("Finish all!!!")
     conn_prs.commit()
     conn_prs.close()
     conn_dbsnp.close()
