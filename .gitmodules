@@ -22,3 +22,9 @@
 [submodule "postaggregators/just_cardio"]
 	path = postaggregators/just_cardio
 	url = https://github.com/dna-seq/just_cardio.git
+[submodule "postaggregators/just_lipidmetabolism"]
+	path = postaggregators/just_lipidmetabolism
+	url = https://github.com/dna-seq/just_lipidmetabolism.git
+[submodule "postaggregators/just_thrombophilia"]
+	path = postaggregators/just_thrombophilia
+	url = https://github.com/dna-seq/just_thrombophilia.git
