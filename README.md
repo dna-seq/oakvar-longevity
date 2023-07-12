@@ -1,5 +1,7 @@
 # oakvar-longevity
 
+[![DOI](https://zenodo.org/badge/444597591.svg)](https://zenodo.org/badge/latestdoi/444597591)
+
 **Oakvar-Longevity** is a module of OakVar which annotates user genome with longevity associated gene variants using the longevitymap annotator, and provides longevity PRS, variants, drugs and major risks(oncorisk) reports with longevity-combinedreporter.
 
 
